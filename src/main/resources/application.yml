@@ -1,0 +1,10 @@
+spring:
+  thymeleaf:
+    mode: HTML
+  datasource:
+    url: jdbc:mysql://localhost:3306/ipc-test?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+mybatis:
+  config-location: classpath:mapper/*.xml
