@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yizhiquan.stockadmin.stockadmin.dao.SaleProductMapper" >
+  <resultMap id="BaseResultMap" type="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="sale_time" property="saleTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="total_money" property="totalMoney" jdbcType="DOUBLE" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct" >
+    insert into sale_product (id, product_code, quantity, 
+      sale_time, create_time, total_money
+      )
+    values (#{id,jdbcType=INTEGER}, #{productCode,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
+      #{saleTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{totalMoney,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct" >
+    insert into sale_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="saleTime != null" >
+        sale_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="totalMoney != null" >
+        total_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="saleTime != null" >
+        #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalMoney != null" >
+        #{totalMoney,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+</mapper>
