@@ -18,7 +18,7 @@ public class StoreAction {
     @GetMapping("/list")
     public ModelAndView listStore(){
 
-        return new ModelAndView("store_list");
+        return new ModelAndView("store_list1");
     }
 
 }

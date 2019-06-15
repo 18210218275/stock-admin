@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+
+<!--<div th:replace="common/header :: myfooter"  ></div>-->
+<div th:replace="common/header :: common_header"  ></div>
+<body>
+
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <html th:replace="common/menu :: left_menu" ></html>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <html th:replace="common/header :: common_header_info" ></html>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-toolbar clearfix">
+                                <form class="pull-right search-bar" method="get" action="#!" role="form">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <input type="hidden" name="search_field" id="search-field" value="title">
+                                            <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                                                标题 <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                                                <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+                                            </ul>
+                                        </div>
+                                        <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+                                    </div>
+                                </form>
+                                <div class="toolbar-btn-action">
+                                    <a class="btn btn-primary m-r-5"  id="addWarehouse" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 新增</a>
+                                    <!--<a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
+                                    <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
+                                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>仓库名称</th>
+                                            <th>仓库地址</th>
+                                            <th>仓库类型</th>
+                                            <th>开仓时间</th>
+                                            <th>创建时间</th>
+                                            <th>备注</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="warehouseTable">
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <input type="hidden" name="pageNum" value="1" >
+                                <input type="hidden" name="pageSize" value="10">
+                                <ul class="pagination">
+
+                                    <li class="disabled"><span>«</span></li>
+                                    <li class="active"><span>1</span></li>
+                                    <li><a href="#1">2</a></li>
+                                    <li><a href="#1">3</a></li>
+                                    <li><a href="#1">4</a></li>
+                                    <li><a href="#1">5</a></li>
+                                    <li><a href="#1">6</a></li>
+                                    <li><a href="#1">7</a></li>
+                                    <li><a href="#1">8</a></li>
+                                    <li class="disabled"><span>...</span></li>
+                                    <li><a href="#!">14452</a></li>
+                                    <li><a href="#!">14453</a></li>
+                                    <li><a href="#!">»</a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+        <!--Start 新增/编辑弹窗-->
+        <html th:replace="warehouse/warehouse_edit :: common" ></html>
+        <!--Start 新增/编辑弹窗-->
+    </div>
+</div>
+<html th:replace="common/footer :: common_footer"  ></html>
+<!--日期选择插件-->
+<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        loadPageList();
+
+    })
+
+    $("#addWarehouse").click(function () {
+        $("#warehouseEditLabel").text("新增仓库");
+        $('#warehouseEdit').modal();
+
+    });
+    //点击保存
+    $("#saveWarehouse").click(function(){
+        saveWarehouse();
+    });
+
+    function saveWarehouse() {
+        let warehouseName =$("input[name='warehouseName']").val();
+        let warehouseAddress=$("input[name='warehouseAddress']").val();
+        let warehouseType=$("input[name='warehouseType']").val();
+        let buildDate=$("input[name='buildDate']").val();
+        let remarks=$("input[name='remarks']").val();
+        if(typeof warehouseName == "undefined" || warehouseName == null || warehouseName == ""){
+            layer.tips('仓库名称不能为空','#warehouseName', {
+                tips: [3, '#ff6666'],
+                time: 2000
+            });
+            return ;
+        }
+        if(typeof warehouseAddress == "undefined" || warehouseAddress == null || warehouseAddress == ""){
+            layer.tips('仓库地址不能为空','#warehouseName', {
+                tips: [3, '#ff6666'],
+                time: 2000
+            });
+        }
+
+        let warehouseReq={
+            "warehouseName":warehouseName,
+            "warehouseAddress":warehouseAddress,
+            "type":warehouseType,
+            "buildDate":buildDate,
+            "remarks":remarks
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/warehouse/saveWarehouse",
+            data: warehouseReq,
+            dataType:"json",
+            success: function(msg){
+                console.info(msg.warehouseName)
+                $("#warehouseEdit").modal("hide");
+                layer.msg('保存成功', {
+                    offset: 't',
+                    anim: 5,
+                    icon:1,
+                    time: 2000
+                });
+            },
+            error:function(){
+
+            }
+        })
+
+    }
+
+    function loadPageList(){
+        let pageNum=$("input[name='pageNum']").val();
+        let pageSize=$("input[name='pageSize']").val();
+        $.ajax({
+            type: "GET",
+            url: "/warehouse/findList",
+            data: "pageNum="+pageNum+"&pageSize="+pageSize,
+            dataType:"json",
+            success: function(msg){
+                console.info(msg.data);
+                fillDataToTable(msg.data);
+                console.info(msg)
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    function fillDataToTable(dataList){
+        if(dataList!=null&&dataList.length>0){
+            let tableHtml="";
+            $.each( dataList, function(index, item){
+                let warehouseType="";
+                if(item.type==0){
+                    warehouseType="主仓";
+                }else if(item.type==1){
+                    warehouseType="店铺仓";
+                }
+                tableHtml+="<tr>"
+                        +"<td>"+(index+1)+"</td>"
+                        +"<td>"+item.warehouseName+"</td>"
+                        +"<td>"+item.warehouseAddress+"</td>"
+                        +"<td>"+warehouseType+"</td>"
+                        +"<td>"+item.buildDate+"</td>"
+                        +"<td>"+item.createTime+"</td>"
+                        +"<td>"+item.remarks+"</td>"
+                        +"<td><div class=\"btn-group\">" +
+                    " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    "</div></td>";
+
+            });
+
+            $("#warehouseTable").append(tableHtml);
+        }
+    }
+
+</script>
+</body>
+</html>

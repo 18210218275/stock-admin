@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
@@ -15,6 +15,7 @@
 
 <body>
 <div class="lyear-layout-web">
+    <p th:text="'Hello！, ' + ${name} + '!'">3333</p>
     <div class="lyear-layout-container">
         <!--左侧导航-->
         <aside class="lyear-layout-sidebar">

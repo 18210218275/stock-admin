@@ -1,55 +1,45 @@
 package com.yizhiquan.stockadmin.stockadmin.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Warehouse {
+    /**
+     * 主键ID
+     */
     private Integer id;
-
+    /**
+     * 仓库名称
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
     private String warehouseName;
-
+    /**
+     * 仓库地址
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
     private String warehouseAddress;
-
-    private Byte type;
-
+    /**
+     * 仓库投入使用时间
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
+    private String buildDate;
+    /**
+     * 仓库类型
+     */
+    private Integer type;
+    /**
+     * 创建数据时间
+     */
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    /**
+     * 备注
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
+    private String remarks;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getWarehouseName() {
-        return warehouseName;
-    }
-
-    public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName == null ? null : warehouseName.trim();
-    }
-
-    public String getWarehouseAddress() {
-        return warehouseAddress;
-    }
-
-    public void setWarehouseAddress(String warehouseAddress) {
-        this.warehouseAddress = warehouseAddress == null ? null : warehouseAddress.trim();
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

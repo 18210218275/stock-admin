@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<html th:fragment="common">
+<div class="modal fade" id="warehouseEdit" tabindex="-1" role="dialog" aria-labelledby="warehouseEditLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="warehouseEditLabel">新增</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="warehouseName">仓库名称：</label>
+                    <input type="text" name="warehouseName" class="form-control" id="warehouseName" placeholder="请输入仓库名称">
+                </div>
+                <div class="form-group">
+                    <label for="warehouseAddress">仓库地址：</label>
+                    <input type="text" name="warehouseAddress" class="form-control" id="warehouseAddress" placeholder="请输入仓库地址">
+                </div>
+                <div class="form-group">
+                    <label>仓库类型：</label>
+                    <div class="form-control">
+                        <label class="lyear-radio radio-inline radio-primary">
+                            <input type="radio" name="warehouseType" value="0" checked><span>主仓</span>
+                        </label>
+                        <label class="lyear-radio radio-inline radio-primary">
+                            <input type="radio" name="warehouseType" value="1"><span>店铺仓</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="buildDate">投入使用时间：</label>
+                    <input class="form-control js-datepicker m-b-10" type="text" id="buildDate" name="buildDate" placeholder="yyyy-mm-dd" value="" data-date-format="yyyy-mm-dd" />
+                </div>
+                <div class="form-group">
+                    <label for="remarks">备注：</label>
+                    <input type="text" name="remarks" class="form-control" id="remarks" placeholder="备注信息">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</div>
+                <!--<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>-->
+                <div type="button" class="btn btn-primary" id="saveWarehouse">保存</div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
