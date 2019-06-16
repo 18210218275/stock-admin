@@ -10,13 +10,13 @@
             <input type="hidden" name="currentPageMenuName" th:value="${pageMenuName}" >
             <nav class="sidebar-main">
                 <ul class="nav nav-drawer">
-                    <li class="nav-item"> <a href="/" ><i class="mdi mdi-home"></i> 首页</a> </li>
+                    <li class="nav-item" id="homePage"> <a href="/" ><i class="mdi mdi-home"></i> 首页</a> </li>
                     <li class="nav-item nav-item-has-subnav">
-                        <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>基础数据</a>
+                        <a href="javascript:void(0)"><i class="mdi mdi-widgets"></i>基础数据</a>
                         <ul class="nav nav-subnav">
-                            <li id="warehouseListPage"> <a href="lyear_ui_buttons.html" th:href="@{/warehouse/list}">仓库管理</a> </li>
-                            <li id="storeListPage"> <a href="lyear_ui_buttons.html" th:href="@{/store/list}">店铺管理</a> </li>
-                            <li id="brandListPage"> <a href="lyear_ui_buttons.html" th:href="@{/brand/list}">品牌管理</a> </li>
+                            <li id="warehouseListPage" > <a href="lyear_ui_buttons.html" th:href="@{/warehouse/list}"><i class="mdi mdi-database"></i>仓库管理</a> </li>
+                            <li id="storeListPage"> <a href="lyear_ui_buttons.html" th:href="@{/store/list}"><i class="mdi mdi-basket"></i>店铺管理</a> </li>
+                            <li id="brandListPage"> <a href="lyear_ui_buttons.html" th:href="@{/brand/list}"><i class="mdi mdi-font-awesome"></i>品牌管理</a> </li>
                             <!--<li> <a href="lyear_ui_cards.html">卡片</a> </li>-->
                         </ul>
                     </li>

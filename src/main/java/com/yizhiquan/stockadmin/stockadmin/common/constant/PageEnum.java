@@ -10,6 +10,8 @@ public enum PageEnum {
 
     STORE_LIST_PAGE("storeList","店铺管理列表页"),
 
+    HOME_INDEX_PAGE("homeIndex","首页"),
+
     WAREHOUSE_LIST_PAGE("warehouseList","仓库管理列表页");
 
     private String pageCode;

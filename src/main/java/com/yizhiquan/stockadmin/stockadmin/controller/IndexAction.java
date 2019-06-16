@@ -1,5 +1,6 @@
 package com.yizhiquan.stockadmin.stockadmin.controller;
 
+import com.yizhiquan.stockadmin.stockadmin.common.constant.PageEnum;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class IndexAction {
     public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
-        modelAndView.addObject("name","鲁秦顺");
+        modelAndView.addObject("pageMenuName", PageEnum.HOME_INDEX_PAGE.getPageCode());
         return modelAndView;
     }
 

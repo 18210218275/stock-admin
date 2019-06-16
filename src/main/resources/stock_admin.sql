@@ -24,12 +24,11 @@ CREATE TABLE `brand` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `brand_name_cn` varchar(50) DEFAULT NULL COMMENT '品牌中文名',
   `brand_name_en` varchar(100) DEFAULT NULL COMMENT '品牌英文名',
+  `brand_code` varchar(50) DEFAULT NULL COMMENT '品牌编码',
   `type` int(4) DEFAULT NULL COMMENT '品牌类型',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='品牌表';
-
-/*Data for the table `brand` */
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='品牌表';
 
 /*Table structure for table `product` */
 
@@ -53,8 +52,6 @@ CREATE TABLE `product` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
 
-/*Data for the table `product` */
-
 /*Table structure for table `product_store_upper` */
 
 DROP TABLE IF EXISTS `product_store_upper`;
@@ -67,8 +64,6 @@ CREATE TABLE `product_store_upper` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='店铺上架商品';
 
-/*Data for the table `product_store_upper` */
-
 /*Table structure for table `product_warehouse_stock` */
 
 DROP TABLE IF EXISTS `product_warehouse_stock`;
@@ -80,8 +75,6 @@ CREATE TABLE `product_warehouse_stock` (
   `quantity` int(11) DEFAULT NULL COMMENT '件数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='仓库存储商品数量';
-
-/*Data for the table `product_warehouse_stock` */
 
 /*Table structure for table `sale_product` */
 
@@ -97,8 +90,6 @@ CREATE TABLE `sale_product` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品销售记录表';
 
-/*Data for the table `sale_product` */
-
 /*Table structure for table `store` */
 
 DROP TABLE IF EXISTS `store`;
@@ -109,13 +100,11 @@ CREATE TABLE `store` (
   `store_address` varchar(255) DEFAULT NULL COMMENT '店铺地址',
   `telephone` varchar(20) DEFAULT NULL COMMENT '联系方式',
   `manager` varchar(20) DEFAULT NULL COMMENT '店长',
-  `start_business_time` timestamp NULL DEFAULT NULL COMMENT '开业时间',
+  `start_business_time` varchar(20) DEFAULT NULL COMMENT '开业时间',
   `type` tinyint(2) DEFAULT NULL COMMENT '店铺类型',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='店铺表';
-
-/*Data for the table `store` */
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='店铺表';
 
 /*Table structure for table `warehouse` */
 
@@ -125,12 +114,12 @@ CREATE TABLE `warehouse` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `warehouse_name` varchar(255) DEFAULT NULL COMMENT '仓库名称',
   `warehouse_address` varchar(255) DEFAULT NULL COMMENT '仓库地址',
+  `build_date` varchar(20) DEFAULT NULL COMMENT '仓库创建时间',
   `type` tinyint(2) DEFAULT NULL COMMENT '仓库类型（0 为小仓，1为大仓）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
-
-/*Data for the table `warehouse` */
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

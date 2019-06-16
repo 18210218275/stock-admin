@@ -12,7 +12,7 @@
 <script type="text/javascript">
     $(function(){
         $('.search-bar .dropdown-menu a').click(function() {
-            var field = $(this).data('field') || '';
+            let field = $(this).data('field') || '';
             $('#search-field').val(field);
             $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
         });
@@ -30,8 +30,10 @@
             let firstTitle=$("#"+pageName+"Page").parent().parent().find("a").first().html();
 
             $("#pageTitle").append(firstTitle+" - "+secondTitle);
-        }else if("home"===pageName){
-            $("#pageTitle").append("首页");
+        }else if("homeIndex"===pageName){
+            $("#homePage").addClass("active");
+            let home=$("#homePage").find("a").html();
+            $("#pageTitle").append(home);
         }
     }
 </script>
