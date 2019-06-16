@@ -47,9 +47,10 @@
             <property name="enableSubPackages" value="false" />
         </javaClientGenerator>
         <!-- 指定数据库表 -->
-<!--        <table tableName="brand" domainObjectName="Brand"
+       <table tableName="brand" domainObjectName="Brand"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
         </table>
+        <!--
         <table tableName="product" domainObjectName="Product"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
         </table>
@@ -65,9 +66,9 @@
         <table tableName="store" domainObjectName="Store"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
         </table>-->
-        <table tableName="warehouse" domainObjectName="Warehouse"
+        <!--<table tableName="warehouse" domainObjectName="Warehouse"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-        </table>
+        </table>-->
 
     </context>
 </generatorConfiguration>

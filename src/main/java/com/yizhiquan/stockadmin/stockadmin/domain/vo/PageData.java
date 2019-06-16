@@ -12,7 +12,9 @@ public class PageData<T> {
 
     private Integer pageSize;
 
-    private Long total;
+    private Long totalNum;
+
+    private Integer totalPage;
 
     private List<T> data;
 }

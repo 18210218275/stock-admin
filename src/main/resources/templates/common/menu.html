@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="zh">
-<html th:fragment="left_menu">
+<html th:fragment="left_menu" >
     <aside class="lyear-layout-sidebar">
         <!-- logo引入 -->
         <div id="logo" class="sidebar-header">
             <a href="index.html"><img src="/images/logo-sidebar.png" title="LightYear" alt="LightYear" /></a>
         </div>
         <div class="lyear-layout-sidebar-scroll">
-
+            <input type="hidden" name="currentPageMenuName" th:value="${pageMenuName}" >
             <nav class="sidebar-main">
                 <ul class="nav nav-drawer">
-                    <li class="nav-item"> <a href="index.html"><i class="mdi mdi-home"></i> 首页</a> </li>
+                    <li class="nav-item"> <a href="/" ><i class="mdi mdi-home"></i> 首页</a> </li>
                     <li class="nav-item nav-item-has-subnav">
-                        <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>仓库管理</a>
+                        <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>基础数据</a>
                         <ul class="nav nav-subnav">
-                            <li> <a href="lyear_ui_buttons.html">查询列表</a> </li>
+                            <li id="warehouseListPage"> <a href="lyear_ui_buttons.html" th:href="@{/warehouse/list}">仓库管理</a> </li>
+                            <li id="storeListPage"> <a href="lyear_ui_buttons.html" th:href="@{/store/list}">店铺管理</a> </li>
+                            <li id="brandListPage"> <a href="lyear_ui_buttons.html" th:href="@{/brand/list}">品牌管理</a> </li>
                             <!--<li> <a href="lyear_ui_cards.html">卡片</a> </li>-->
                         </ul>
                     </li>
@@ -23,11 +25,11 @@
                         <ul class="nav nav-subnav">
                             <li> <a href="lyear_forms_elements.html">查询列表</a> </li>
                         </ul>
-                    </li>
-                    <li class="nav-item nav-item-has-subnav active open">
+                    </li><!--active open-->
+                    <li class="nav-item nav-item-has-subnav ">
                         <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 商品管理</a>
                         <ul class="nav nav-subnav">
-                            <li class="active"> <a href="lyear_pages_doc.html">商品列表</a> </li>
+                            <li > <a href="lyear_pages_doc.html">商品列表</a> </li>
                             <li> <a href="lyear_pages_gallery.html">添加列表</a> </li>
                         </ul>
                     </li>

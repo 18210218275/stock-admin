@@ -2,6 +2,7 @@ package com.yizhiquan.stockadmin.stockadmin.controller.warehouse;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
+import com.yizhiquan.stockadmin.stockadmin.common.constant.PageEnum;
 import com.yizhiquan.stockadmin.stockadmin.domain.Warehouse;
 import com.yizhiquan.stockadmin.stockadmin.domain.vo.PageData;
 import com.yizhiquan.stockadmin.stockadmin.service.WarehouseService;
@@ -24,7 +25,10 @@ public class WarehouseAction {
 
     @GetMapping("/list")
     public ModelAndView stockList(){
-        return new ModelAndView("warehouse/warehouse_list");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("warehouse/warehouse_list");
+        modelAndView.addObject("pageMenuName", PageEnum.WAREHOUSE_LIST_PAGE.getPageCode());
+        return modelAndView;
     }
 
     @PostMapping("/saveWarehouse")

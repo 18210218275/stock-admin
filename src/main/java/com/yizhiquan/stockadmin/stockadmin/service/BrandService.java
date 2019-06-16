@@ -1,0 +1,15 @@
+package com.yizhiquan.stockadmin.stockadmin.service;
+
+import com.yizhiquan.stockadmin.stockadmin.domain.Brand;
+import com.yizhiquan.stockadmin.stockadmin.domain.vo.PageData;
+
+public interface BrandService {
+    void saveBrand(Brand brand);
+    /**
+     * 分页查询品牌数据
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageData<Brand> findlList(int pageNum, int pageSize);
+}

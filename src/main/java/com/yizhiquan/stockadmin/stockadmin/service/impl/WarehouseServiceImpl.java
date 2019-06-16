@@ -38,7 +38,8 @@ public class WarehouseServiceImpl implements WarehouseService {
         PageData<Warehouse> warehousePageData = PageData.<Warehouse>builder()
                 .pageNum(pageNum)
                 .pageSize(pageSize)
-                .total(warehousePages.getTotal())
+                .totalNum(warehousePages.getTotal())
+                .totalPage(warehousePages.getPages())
                 .data(warehousePages.getResult())
                 .build();
 

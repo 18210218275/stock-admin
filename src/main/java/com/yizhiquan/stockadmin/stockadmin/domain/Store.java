@@ -1,85 +1,50 @@
 package com.yizhiquan.stockadmin.stockadmin.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Store {
+    /**
+     * 主键ID
+     */
     private Integer id;
-
+    /**
+     * 店铺名称
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
     private String storeName;
-
+    /**
+     * 店铺地址
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
     private String storeAddress;
-
+    /**
+     * 店铺电话
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
     private String telephone;
-
+    /**
+     * 店长
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
     private String manager;
-
-    private Date startBusinessTime;
-
+    /**
+     * 店铺开业时间
+     */
+    @JSONField(serialzeFeatures= SerializerFeature.WriteNullStringAsEmpty)
+    private String startBusinessTime;
+    /**
+     * 店铺类型
+     */
     private Byte type;
-
+    /**
+     * 创建时间
+     */
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public void setStoreName(String storeName) {
-        this.storeName = storeName == null ? null : storeName.trim();
-    }
-
-    public String getStoreAddress() {
-        return storeAddress;
-    }
-
-    public void setStoreAddress(String storeAddress) {
-        this.storeAddress = storeAddress == null ? null : storeAddress.trim();
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone == null ? null : telephone.trim();
-    }
-
-    public String getManager() {
-        return manager;
-    }
-
-    public void setManager(String manager) {
-        this.manager = manager == null ? null : manager.trim();
-    }
-
-    public Date getStartBusinessTime() {
-        return startBusinessTime;
-    }
-
-    public void setStartBusinessTime(Date startBusinessTime) {
-        this.startBusinessTime = startBusinessTime;
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }
