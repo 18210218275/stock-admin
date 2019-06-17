@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yizhiquan.stockadmin.stockadmin.dao.WarehouseMapper" >
+  <resultMap id="BaseResultMap" type="com.yizhiquan.stockadmin.stockadmin.domain.Warehouse" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="warehouse_address" property="warehouseAddress" jdbcType="VARCHAR" />
+    <result column="build_date" property="buildDate" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Warehouse" >
+    insert into warehouse (id, warehouse_name, warehouse_address, 
+      build_date, type, create_time, 
+      remarks)
+    values (#{id,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR}, #{warehouseAddress,jdbcType=VARCHAR}, 
+      #{buildDate,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Warehouse" >
+    insert into warehouse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="warehouseAddress != null" >
+        warehouse_address,
+      </if>
+      <if test="buildDate != null" >
+        build_date,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseAddress != null" >
+        #{warehouseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="buildDate != null" >
+        #{buildDate,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectWarehouse" resultMap="BaseResultMap">
+      SELECT
+        *
+      FROM
+        warehouse
+  </select>
+</mapper>

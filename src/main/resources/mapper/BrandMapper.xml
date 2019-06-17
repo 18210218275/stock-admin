@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yizhiquan.stockadmin.stockadmin.dao.BrandMapper" >
+  <resultMap id="BaseResultMap" type="com.yizhiquan.stockadmin.stockadmin.domain.Brand" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="brand_name_cn" property="brandNameCn" jdbcType="VARCHAR" />
+    <result column="brand_name_en" property="brandNameEn" jdbcType="VARCHAR" />
+    <result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Brand" >
+    insert into brand (id, brand_name_cn, brand_name_en, 
+      brand_code, type, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{brandNameCn,jdbcType=VARCHAR}, #{brandNameEn,jdbcType=VARCHAR}, 
+      #{brandCode,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Brand" >
+    insert into brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="brandNameCn != null" >
+        brand_name_cn,
+      </if>
+      <if test="brandNameEn != null" >
+        brand_name_en,
+      </if>
+      <if test="brandCode != null" >
+        brand_code,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="brandNameCn != null" >
+        #{brandNameCn,jdbcType=VARCHAR},
+      </if>
+      <if test="brandNameEn != null" >
+        #{brandNameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="brandCode != null" >
+        #{brandCode,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectBrand" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      brand
+  </select>
+</mapper>

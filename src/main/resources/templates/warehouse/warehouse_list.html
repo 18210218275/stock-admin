@@ -40,7 +40,7 @@
                                     </div>
                                 </form>
                                 <div class="toolbar-btn-action">
-                                    <a class="btn btn-primary m-r-5"  id="addStore" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 新增</a>
+                                    <a class="btn btn-primary m-r-5"  id="addWarehouse" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 新增</a>
                                     <!--<a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
                                     <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
                                     <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
@@ -53,16 +53,16 @@
                                         <thead>
                                         <tr>
                                             <th>编号</th>
-                                            <th>店铺名称</th>
-                                            <th>店铺地址</th>
-                                            <th>店长</th>
-                                            <th>联系方式</th>
-                                            <th>开业时间</th>
+                                            <th>仓库名称</th>
+                                            <th>仓库地址</th>
+                                            <th>仓库类型</th>
+                                            <th>开仓时间</th>
                                             <th>创建时间</th>
+                                            <th>备注</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="storeTable">
+                                        <tbody id="warehouseTable">
 
                                         </tbody>
                                     </table>
@@ -83,7 +83,7 @@
         </main>
         <!--End 页面主要内容-->
         <!--Start 新增/编辑弹窗-->
-        <html th:replace="store/store_edit :: common" ></html>
+        <html th:replace="warehouse/warehouse_edit :: common" ></html>
         <!--Start 新增/编辑弹窗-->
     </div>
 </div>
@@ -95,59 +95,66 @@
     $(function(){
         loadPageList();
 
+    })
+
+    $("#addWarehouse").click(function () {
+        $("#warehouseEditLabel").text("新增仓库");
+        $('#warehouseEdit').modal();
+
+    });
+    //点击保存
+    $("#saveWarehouse").click(function(){
+        saveWarehouse();
     });
 
-    $("#addStore").click(function () {
-        $("#storeEditLabel").text("新增店铺");
-        $('#storeEdit').modal();
-    });
-
-    $("#saveStore").click(function () {
-        $(this).attr("disabled","disabled");
-        saveStore();
-        $(this).removeAttr("disabled");
-    });
-
-    function saveStore(){
-        let storeName=$("input[name='storeName']").val();
-        let storeAddress=$("input[name='storeAddress']").val();
-        let manager=$("input[name='manager']").val();
-        let telephone=$("input[name='telephone']").val();
-        let startBusinessTime=$("input[name='startBusinessTime']").val();
-        if(typeof storeName=='undefined' || storeName==null|| storeName==""){
-
+    function saveWarehouse() {
+        let warehouseName =$("input[name='warehouseName']").val();
+        let warehouseAddress=$("input[name='warehouseAddress']").val();
+        let warehouseType=$("input[name='warehouseType']").val();
+        let buildDate=$("input[name='buildDate']").val();
+        let remarks=$("input[name='remarks']").val();
+        if(typeof warehouseName == "undefined" || warehouseName == null || warehouseName == ""){
+            layer.tips('仓库名称不能为空','#warehouseName', {
+                tips: [3, '#ff6666'],
+                time: 2000
+            });
+            return ;
         }
-        if(typeof storeAddress=='undefined' || storeAddress==null || storeAddress){
-
+        if(typeof warehouseAddress == "undefined" || warehouseAddress == null || warehouseAddress == ""){
+            layer.tips('仓库地址不能为空','#warehouseName', {
+                tips: [3, '#ff6666'],
+                time: 2000
+            });
         }
-        let storeReq={
-            "storeName":storeName,
-            "storeAddress": storeAddress,
-            "manager":manager,
-            "telephone":telephone,
-            "startBusinessTime":startBusinessTime
+
+        let warehouseReq={
+            "warehouseName":warehouseName,
+            "warehouseAddress":warehouseAddress,
+            "type":warehouseType,
+            "buildDate":buildDate,
+            "remarks":remarks
         }
 
         $.ajax({
             type: "POST",
-            url: "/store/saveStore",
-            data: storeReq,
+            url: "/warehouse/saveWarehouse",
+            data: warehouseReq,
             dataType:"json",
             success: function(msg){
-                console.info(msg)
-                $("#storeEdit").modal("hide");
+                console.info(msg.warehouseName)
+                $("#warehouseEdit").modal("hide");
                 layer.msg('保存成功', {
                     offset: 't',
                     anim: 5,
                     icon:1,
                     time: 2000
                 });
-                loadPageList();
             },
             error:function(){
 
             }
         })
+
     }
 
     function loadPageList(){
@@ -155,7 +162,7 @@
         let pageSize=$("input[name='pageSize']").val();
         $.ajax({
             type: "GET",
-            url: "/store/findList",
+            url: "/warehouse/findList",
             data: "pageNum="+pageNum+"&pageSize="+pageSize,
             dataType:"json",
             success: function(msg){
@@ -168,24 +175,32 @@
         })
     }
 
-    function fillDataToTable(storeList){
-        if(storeList!=null&&storeList.length>0){
+    function fillDataToTable(dataList){
+        if(dataList!=null&&dataList.length>0){
             let tableHtml="";
-            $.each(storeList,function (index,item) {
+            $.each( dataList, function(index, item){
+                let warehouseType="";
+                if(item.type==0){
+                    warehouseType="主仓";
+                }else if(item.type==1){
+                    warehouseType="店铺仓";
+                }
                 tableHtml+="<tr>"
-                    +"<td>"+(index+1)+"</td>"
-                    +"<td>"+item.storeName+"</td>"
-                    +"<td>"+item.storeAddress+"</td>"
-                    +"<td>"+item.manager+"</td>"
-                    +"<td>"+item.telephone+"</td>"
-                    +"<td>"+item.startBusinessTime+"</td>"
-                    +"<td>"+item.createTime+"</td>"
-                    +"<td><div class=\"btn-group\">" +
+                        +"<td>"+(index+1)+"</td>"
+                        +"<td>"+item.warehouseName+"</td>"
+                        +"<td>"+item.warehouseAddress+"</td>"
+                        +"<td>"+warehouseType+"</td>"
+                        +"<td>"+item.buildDate+"</td>"
+                        +"<td>"+item.createTime+"</td>"
+                        +"<td>"+item.remarks+"</td>"
+                        +"<td><div class=\"btn-group\">" +
                     " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
                     "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                     "</div></td>";
-            })
-            $("#storeTable").empty().append(tableHtml);
+
+            });
+
+            $("#warehouseTable").empty().append(tableHtml);
         }
     }
 
@@ -213,8 +228,6 @@
 
         });
     }
-
-
 
 </script>
 </body>

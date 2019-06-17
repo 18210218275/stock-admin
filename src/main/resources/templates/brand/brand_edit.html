@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<html th:fragment="common">
+<div class="modal fade" id="brandEdit" tabindex="-1" role="dialog" aria-labelledby="brandEditLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="brandEditLabel">新增</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="brandNameCn">品牌中文名：</label>
+                    <input type="text" name="brandNameCn" class="form-control" id="brandNameCn" placeholder="请输入品牌中文名">
+                </div>
+                <div class="form-group">
+                    <label for="brandNameEn">品牌中文名：</label>
+                    <input type="text" name="brandNameEn" class="form-control" id="brandNameEn" placeholder="请输入品牌英文名">
+                </div>
+                <div class="form-group">
+                    <label for="brandCode">编号：</label>
+                    <input type="text" name="brandCode" class="form-control" id="brandCode" placeholder="请输入编号">
+                </div>
+                <div class="form-group">
+                    <label for="type">品牌类型：</label>
+                    <input type="text" name="type" class="form-control" id="type" placeholder="请选择品牌类型">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</div>
+                <!--<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>-->
+                <div type="button" class="btn btn-primary" id="saveStore">保存</div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

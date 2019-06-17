@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<html th:fragment="common_footer">
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/layer/layer.js"></script>
+<script type="text/javascript" src="/js/bootstrap-paginator.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        $('.search-bar .dropdown-menu a').click(function() {
+            let field = $(this).data('field') || '';
+            $('#search-field').val(field);
+            $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        });
+        activePageMenu();
+
+    });
+
+    function activePageMenu(){
+        let pageName=$("input[name='currentPageMenuName']").val();
+        //active open
+        if("warehouseList"===pageName||"storeList"===pageName||"brandList"===pageName){
+            $("#"+pageName+"Page").addClass("active");
+            $("#"+pageName+"Page").parent().parent().addClass("active open");
+            let secondTitle=$("#"+pageName+"Page").find("a").html();
+            let firstTitle=$("#"+pageName+"Page").parent().parent().find("a").first().html();
+
+            $("#pageTitle").append(firstTitle+" - "+secondTitle);
+        }else if("homeIndex"===pageName){
+            $("#homePage").addClass("active");
+            let home=$("#homePage").find("a").html();
+            $("#pageTitle").append(home);
+        }
+    }
+</script>
+
+</html>
