@@ -12,3 +12,10 @@ server:
   port: 80
 pagehelper:
   helper-dialect: mysql
+logging:
+  config: classpath:logging/logback-spring.xml
+log:
+  info:
+    path: /app/stock_admin_logs/stock-admin/info/stock_admin-info
+  error:
+    path: /app/stock_admin_logs/stock-admin/error/stock_admin-error
