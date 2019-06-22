@@ -35,3 +35,7 @@ HELP.md
 
 out
 gen
+!/.idea/
+src/main/java/com/yizhiquan/stockadmin/stockadmin/dao/ProductSpecMapper.java
+src/main/java/com/yizhiquan/stockadmin/stockadmin/domain/ProductSpec.java
+src/main/resources/mapper/ProductSpecMapper.xml

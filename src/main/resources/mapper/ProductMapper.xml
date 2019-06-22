@@ -9,13 +9,22 @@
     <result column="time_to_market" property="timeToMarket" jdbcType="VARCHAR" />
     <result column="market_price" property="marketPrice" jdbcType="DOUBLE" />
     <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
-    <result column="size" property="size" jdbcType="VARCHAR" />
-    <result column="color" property="color" jdbcType="VARCHAR" />
+   <!-- <result column="size" property="size" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />-->
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="sex" property="sex" jdbcType="TINYINT" />
     <result column="clothing_type" property="clothingType" jdbcType="INTEGER" />
-    <result column="purchase_time" property="purchaseTime" jdbcType="TIMESTAMP" />
+    <!--<result column="purchase_time" property="purchaseTime" jdbcType="TIMESTAMP" />-->
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <collection property="productSpecList" javaType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec">
+      <result column="spec_id" property="id" jdbcType="INTEGER" />
+      <result column="product_id" property="productId" jdbcType="INTEGER" />
+      <result column="color" property="color" jdbcType="VARCHAR" />
+      <result column="size" property="size" jdbcType="INTEGER" />
+      <result column="quantity" property="quantity" jdbcType="INTEGER" />
+      <result column="purchase_time" property="purchaseTime" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </collection>
   </resultMap>
   <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Product" >
     insert into product (id, product_name, product_code, 
@@ -29,7 +38,7 @@
       #{quantity,jdbcType=INTEGER}, #{sex,jdbcType=TINYINT}, #{clothingType,jdbcType=INTEGER}, 
       #{purchaseTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Product" >
+  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Product" useGeneratedKeys="true" keyProperty="id" >
     insert into product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -120,4 +129,22 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="selectProductByCode" resultMap="BaseResultMap">
+    SELECT
+      p.`id`,
+      p.`brand_id`,
+      p.`quantity`,
+      p.`market_price`,
+      p.`time_to_market`,
+      s.`purchase_time`,
+      s.`color`,
+      s.`size`,
+      s.`quantity`
+    FROM
+      product p
+      JOIN product_spec s
+        ON p.`id` = s.`product_id`
+    WHERE p.`product_code` = #{productCode}
+  </select>
 </mapper>
