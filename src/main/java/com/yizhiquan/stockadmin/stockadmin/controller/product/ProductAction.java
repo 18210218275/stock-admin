@@ -1,15 +1,17 @@
 package com.yizhiquan.stockadmin.stockadmin.controller.product;
 
 import com.alibaba.fastjson.JSON;
+import com.yizhiquan.stockadmin.stockadmin.domain.Brand;
 import com.yizhiquan.stockadmin.stockadmin.domain.Product;
 import com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec;
+import com.yizhiquan.stockadmin.stockadmin.service.BrandService;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductService;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,9 +19,12 @@ import java.util.Map;
 public class ProductAction {
     private ProductService productService;
 
+    private BrandService brandService;
+
     @Autowired
-    public ProductAction(ProductService productService){
+    public ProductAction(ProductService productService, BrandService brandService){
         this.productService=productService;
+        this.brandService=brandService;
     }
 
     @GetMapping("/list")
@@ -29,7 +34,11 @@ public class ProductAction {
 
     @GetMapping("/edit")
     public ModelAndView editProduct(){
-        return new ModelAndView("product/product_add");
+        List<Brand> brandList = brandService.findAllBrand();
+        ModelAndView model = new ModelAndView("product/product_add");
+        model.setViewName("product/product_add");
+        model.addObject("brandList",brandList);
+        return model;
     }
 
     @GetMapping("/findProductByCode")
@@ -50,6 +59,6 @@ public class ProductAction {
     @PostMapping("/addProductSpec")
     public String addProductSpec(ProductSpec productSpec){
         productService.saveProductSpec(productSpec);
-        return "";
+        return "Success";
     }
 }

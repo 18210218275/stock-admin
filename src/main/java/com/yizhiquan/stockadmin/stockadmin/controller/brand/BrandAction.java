@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("brand")
 public class BrandAction {
@@ -41,5 +43,12 @@ public class BrandAction {
     public String findList(@RequestParam("pageNum") int pageNum, @RequestParam("pageSize") int pageSize){
         PageData<Brand> brandPageList=brandService.findlList(pageNum,pageSize);
         return JSON.toJSONString(brandPageList);
+    }
+
+    @GetMapping("/findAllBrand")
+    @ResponseBody
+    public String findAllBrand(){
+        List<Brand> brandList=brandService.findAllBrand();
+        return JSON.toJSONString(brandList);
     }
 }

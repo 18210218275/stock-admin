@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @Slf4j
@@ -40,5 +42,11 @@ public class BrandServiceImpl implements BrandService {
                 .data(brandList.getResult())
                 .build();
         return brandPageData;
+    }
+
+    @Override
+    public List<Brand> findAllBrand() {
+        //定义缓存 guava cache
+        return brandMapper.selectBrand();
     }
 }

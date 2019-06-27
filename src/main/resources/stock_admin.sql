@@ -52,6 +52,21 @@ CREATE TABLE `product` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
 
+/*Table structure for table `product_spec` */
+
+DROP TABLE IF EXISTS `product_spec`;
+
+CREATE TABLE `product_spec` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `product_id` int(11) DEFAULT NULL COMMENT '商品ID',
+  `color` varchar(20) DEFAULT NULL COMMENT '颜色',
+  `size` int(2) DEFAULT NULL COMMENT '尺寸',
+  `quantity` int(11) DEFAULT NULL COMMENT '数量',
+  `purchase_time` varchar(50) DEFAULT NULL COMMENT '进货时间',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 /*Table structure for table `product_store_upper` */
 
 DROP TABLE IF EXISTS `product_store_upper`;
@@ -119,7 +134,7 @@ CREATE TABLE `warehouse` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
