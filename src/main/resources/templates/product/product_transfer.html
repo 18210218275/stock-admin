@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+
+<!--<div th:replace="common/header :: myfooter"  ></div>-->
+<div th:replace="common/header :: common_header"  ></div>
+<body>
+
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <html th:replace="common/menu :: left_menu" ></html>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <html th:replace="common/header :: common_header_info" ></html>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+
+                            <div class="card-toolbar clearfix">
+                                <form class="pull-right search-bar" method="get" action="#!" role="form">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <input type="hidden" name="search_field" id="search-field" value="title">
+                                            <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                                                商品货号 <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">商品货号</a> </li>
+                                                <!--<li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>-->
+                                            </ul>
+                                        </div>
+                                        <input type="text" class="form-control" value="" name="productCode" placeholder="请输入商品货号">
+                                    </div>
+                                </form>
+                                <div class="toolbar-btn-action">
+                                    <a class="btn btn-primary m-r-5"  id="transferProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 商品调拨</a>
+                                    <!--<a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
+                                    <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
+                                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
+                                </div>
+                            </div>
+                            <div class="card-body">
+                               <!-- <div class="toolbar-btn-action">
+                                    <a class="btn btn-primary m-r-5"  id="addProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 单个商品调拨</a>
+                                    <a class="btn btn-primary m-r-5"  id="addProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 批量商品调拨</a>
+                                    &lt;!&ndash;<a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
+                                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>&ndash;&gt;
+                                </div>-->
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>商品货号</th>
+                                            <th>商品名称</th>
+                                            <th>品牌</th>
+                                            <th>尺码</th>
+                                            <th>颜色</th>
+                                            <th>件数</th>
+                                            <th>调出仓库</th>
+                                            <th>调入仓库</th>
+                                            <!--<th>操作时间</th>-->
+                                            <!-- <th>开仓时间</th>
+                                             <th>创建时间</th>
+                                             <th>备注</th>-->
+                                            <!--<th>操作</th>-->
+                                        </tr>
+                                        </thead>
+                                        <tbody id="transferProductTable">
+                                            <tr specId="2">
+                                                <th>商品货号</th>
+                                                <th>商品名称</th>
+                                                <th>品牌</th>
+                                                <th>尺码</th>
+                                                <th>颜色</th>
+                                                <th><input type="text" name="quantity" class="form-control"></th>
+                                                <th>
+                                                    <select class="form-control out_transfer" >
+                                                        <option value="">---请选择---</option>
+                                                    </select>
+                                                </th>
+                                                <th>
+                                                    <select class="form-control in_transfer">
+                                                        <option value="">---请选择---</option>
+                                                    </select>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <div style="align-content: center">
+                                    <a class="btn btn-success" id="saveBut" style="margin-left: 45%;" href="javascript:void(0);"><i class="mdi mdi-check"></i> 保存</a>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+        <!--Start 新增/编辑弹窗-->
+        <html th:replace="product/product_edit :: common" ></html>
+        <!--Start 新增/编辑弹窗-->
+    </div>
+</div>
+<html th:replace="common/footer :: common_footer"  ></html>
+<!--日期选择插件-->
+<script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script type="text/javascript">
+    var warehouseList;
+    $(function(){
+        // loadPageList();
+        loadWarehouseList();
+    });
+
+    function loadWarehouseList(){
+        $.ajax({
+            type:"GET",
+            url:"/warehouse/findAllList",
+            success:function(data){
+                let warehouseList=data.data;
+                warehouseList=warehouseList;
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    function getTransferByProoduct(){
+        let productCode=$("input[name='productCode']").val();
+        $.ajax({
+            type: "GET",
+            url: "/product/findProductByCode?productCode="+productCode,
+            success: function(data){
+                console.info("返回数据： "+data.data);
+                if(null!=data.data){
+                    //回显数据
+                }
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    $("#saveBut").click(function () {
+        let productSpecs=$("#transferProductTable").children("tr");
+        console.info(productSpecs);
+        let transferArr=new Array();
+        $(productSpecs).each(function(i){
+            let specId=$(this).attr("specId");
+            let outWarehouse=$(this).find(".out_transfer").val();
+            let inWarehouse=$(this).find(".in_transfer").val();
+            //调拨数量
+            let quantity=$(this).find("input[name='quantity']").val();
+            let transfer={
+                "specId": specId,
+                "outWarehouse":outWarehouse,
+                "inWarehouse": inWarehouse,
+                "quantity": quantity
+            }
+            transferArr.push(transfer);
+        });
+        let dataReq={
+            "transferData": JSON.stringify(transferArr)
+        }
+        //发送调拨请求
+        $.ajax({
+            type: "POST",
+            url: "/product/saveTransfer",
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(transferArr),
+            success: function(data){
+
+            }
+    });
+    });
+    //检测商品是否已经录入过
+    // $("input[name='productCode']").blur(function(){
+    //     //调用接口
+    //     let productCode=$(this).val();
+    //     //findProductByCode
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/product/findProductByCode?productCode="+productCode,
+    //         success: function(data){
+    //             console.info("返回数据： "+data.data);
+    //             if(null!=data.data){
+    //                 //回显数据
+    //             }
+    //         },
+    //         error:function(){
+    //
+    //         }
+    //     })
+    // });
+
+    $("#addProduct").click(function () {
+        $("#productEditLabel").text("新增品牌");
+        $('#productEdit').modal();
+    });
+
+    $("#saveStore").click(function () {
+        $(this).attr("disabled","disabled");
+        saveStore();
+        $(this).removeAttr("disabled");
+    });
+
+    function saveStore(){
+        let brandNameCn=$("input[name='brandNameCn']").val();
+        let brandNameEn=$("input[name='brandNameEn']").val();
+        let brandCode=$("input[name='brandCode']").val();
+        let type=$("input[name='type']").val();
+
+        if(typeof brandNameCn=='undefined' || brandNameCn==null|| brandNameCn==""){
+
+        }
+        if(typeof brandCode=='undefined' || brandCode==null || brandCode){
+
+        }
+        let brandReq={
+            "brandNameCn":brandNameCn,
+            "brandNameEn": brandNameEn,
+            "brandCode":brandCode,
+            "type":type
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/brand/saveBrand",
+            data: brandReq,
+            dataType:"json",
+            success: function(msg){
+                $("#brandEdit").modal("hide");
+                layer.msg('保存成功', {
+                    offset: 't',
+                    anim: 5,
+                    icon:1,
+                    time: 2000
+                });
+                loadPageList();
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    function loadPageList(){
+        let pageNum=$("input[name='pageNum']").val();
+        let pageSize=$("input[name='pageSize']").val();
+        $.ajax({
+            type: "GET",
+            url: "/brand/findList",
+            data: "pageNum="+pageNum+"&pageSize="+pageSize,
+            dataType:"json",
+            success: function(msg){
+                fillDataToTable(msg.data);
+                loadPage(msg.pageNum,msg.totalPage);
+                console.info(msg)
+            },
+            error:function(){
+
+            }
+        })
+    }
+
+    function fillDataToTable(brandList){
+        if(brandList!=null&&brandList.length>0){
+            let tableHtml="";
+            $.each(brandList,function (index,item) {
+                tableHtml+="<tr>"
+                    +"<td>"+(index+1)+"</td>"
+                    +"<td>"+item.brandNameCn+"</td>"
+                    +"<td>"+item.brandNameEn+"</td>"
+                    +"<td>"+item.brandCode+"</td>"
+                    +"<td>"+item.type+"</td>"
+                    +"<td>"+item.createTime+"</td>"
+                    +"<td><div class=\"btn-group\">" +
+                    " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    "</div></td>";
+            })
+            $("#brandTable").empty().append(tableHtml);
+        }
+    }
+
+    function loadPage(currentPage,total){
+        $('#pageLimit').bootstrapPaginator({
+            currentPage: currentPage,
+            totalPages: total,
+            size:"normal",
+            bootstrapMajorVersion: 3,
+            alignment:"right",
+            numberOfPages:6,
+            itemTexts: function (type, page, current) {
+                switch (type) {
+                    case "first": return "首页";
+                    case "prev": return "上一页";
+                    case "next": return "下一页";
+                    case "last": return "末页";
+                    case "page": return page;
+                }
+            },
+            onPageClicked: function(event, originalEvent, type, page){
+                $("input[name='pageNum']").val(page);
+                loadPageList();
+            }
+
+        });
+    }
+
+
+
+
+
+
+</script>
+</body>
+</html>

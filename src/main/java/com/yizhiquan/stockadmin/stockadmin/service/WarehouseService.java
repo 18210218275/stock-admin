@@ -21,4 +21,10 @@ public interface WarehouseService {
      * @return
      */
     PageData findWarehouseList(int pageNum, int pageSize);
+
+    /**
+     * 查询所有的仓库
+     * @return
+     */
+    List<Warehouse> findAllWarehouseList();
 }

@@ -1,9 +1,12 @@
 package com.yizhiquan.stockadmin.stockadmin.controller.product;
 
 import com.alibaba.fastjson.JSON;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ResultWrapper;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ServiceResult;
 import com.yizhiquan.stockadmin.stockadmin.domain.Brand;
 import com.yizhiquan.stockadmin.stockadmin.domain.Product;
 import com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec;
+import com.yizhiquan.stockadmin.stockadmin.domain.dto.TransferReq;
 import com.yizhiquan.stockadmin.stockadmin.service.BrandService;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +45,9 @@ public class ProductAction {
     }
 
     @GetMapping("/findProductByCode")
-    public Product findProductByCode(@RequestParam("productCode") String productCode){
+    public ServiceResult findProductByCode(@RequestParam("productCode") String productCode){
         Product product=productService.selectProductByCode(productCode);
-        return product;
+        return ResultWrapper.success(product);
     }
 
     @GetMapping("/addProduct")
@@ -61,4 +64,19 @@ public class ProductAction {
         productService.saveProductSpec(productSpec);
         return "Success";
     }
+
+    @GetMapping("/transfer")
+    public ModelAndView transferProductPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("product/product_transfer");
+        return modelAndView;
+    }
+
+    @PostMapping("/saveTransfer")
+    @ResponseBody
+    public ServiceResult saveTransferProduct(@RequestBody List<TransferReq> transferReqList){
+        System.out.println(JSON.toJSONString(transferReqList));
+        return ResultWrapper.success();
+    }
+
 }

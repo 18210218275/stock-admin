@@ -3,6 +3,8 @@ package com.yizhiquan.stockadmin.stockadmin.controller.warehouse;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.yizhiquan.stockadmin.stockadmin.common.constant.PageEnum;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ResultWrapper;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ServiceResult;
 import com.yizhiquan.stockadmin.stockadmin.domain.Warehouse;
 import com.yizhiquan.stockadmin.stockadmin.domain.vo.PageData;
 import com.yizhiquan.stockadmin.stockadmin.service.WarehouseService;
@@ -46,5 +48,12 @@ public class WarehouseAction {
         PageData<Warehouse> warehouseList=warehouseService.findWarehouseList(pageNum,pageSize);
         log.info(JSON.toJSONString(warehouseList));
         return JSON.toJSONString(warehouseList);
+    }
+
+    @GetMapping("/findAllList")
+    @ResponseBody
+    public ServiceResult findAllWarehouseList(){
+        List<Warehouse> warehouseList=warehouseService.findAllWarehouseList();
+        return ResultWrapper.success(warehouseList);
     }
 }

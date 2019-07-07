@@ -46,4 +46,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         log.info("分页查询返回数据：{}",JSON.toJSONString(warehousePages));
         return warehousePageData;
     }
+
+    @Override
+    public List<Warehouse> findAllWarehouseList() {
+        return warehouseMapper.selectWarehouse();
+    }
 }

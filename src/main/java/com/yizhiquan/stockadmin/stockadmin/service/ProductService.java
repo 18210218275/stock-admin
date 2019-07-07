@@ -3,6 +3,8 @@ package com.yizhiquan.stockadmin.stockadmin.service;
 import com.yizhiquan.stockadmin.stockadmin.domain.Product;
 import com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec;
 
+import java.util.List;
+
 public interface ProductService {
     /**
      * 添加商品主体信息

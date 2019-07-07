@@ -11,4 +11,6 @@ public interface ProductMapper {
     int insertSelective(Product record);
 
     Product selectProductByCode(@Param("productCode") String productCode);
+
+    Product selectProductSpecByCode(String productCode);
 }

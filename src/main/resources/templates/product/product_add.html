@@ -28,7 +28,7 @@
                                     <div class="form-group">
                                         <label for="productCode" class="col-sm-2 control-label">商品货号</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="productCode" placeholder="请输入商品货号">
+                                            <input type="text" class="form-control"  name="productCode" id="productCode" placeholder="请输入商品货号">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -38,10 +38,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="brandCode" class="col-sm-2 control-label">品牌</label>
+                                        <label  class="col-sm-2 control-label">品牌</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="brandCode" placeholder="请选择品牌">
+                                            <select class="form-control">
+                                                <option value="">---请选择---</option>
+                                                <option th:each="brand : ${brandList}" th:value="${brand.brandCode}" th:text="${brand.brandNameCn
+                                                }"></option>
+                                            </select>
                                         </div>
+
                                     </div>
                                     <div class="form-group">
                                         <label for="marketPrice" class="col-sm-2 control-label">吊牌价</label>
@@ -123,6 +128,26 @@
     $(function(){
        // loadPageList();
 
+    });
+
+    //检测商品是否已经录入过
+    $("input[name='productCode']").blur(function(){
+        //调用接口
+        let productCode=$(this).val();
+        //findProductByCode
+        $.ajax({
+            type: "GET",
+            url: "/product/findProductByCode?productCode="+productCode,
+            success: function(data){
+               console.info("返回数据： "+data.data);
+               if(null!=data.data){
+                   //回显数据
+               }
+            },
+            error:function(){
+
+            }
+        })
     });
 
     $("#addProduct").click(function () {
