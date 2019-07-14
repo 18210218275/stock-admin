@@ -2,13 +2,17 @@ package com.yizhiquan.stockadmin.stockadmin.service.impl;
 
 import com.yizhiquan.stockadmin.stockadmin.dao.ProductMapper;
 import com.yizhiquan.stockadmin.stockadmin.dao.ProductSpecMapper;
+import com.yizhiquan.stockadmin.stockadmin.dao.ProductWarehouseStockMapper;
 import com.yizhiquan.stockadmin.stockadmin.domain.Product;
 import com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec;
+import com.yizhiquan.stockadmin.stockadmin.domain.dto.TransferReq;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,10 +22,15 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductSpecMapper productSpecMapper;
 
+    private ProductWarehouseStockMapper productWarehouseStockMapper;
+
     @Autowired
-    public ProductServiceImpl(ProductMapper productMapper,ProductSpecMapper productSpecMapper){
+    public ProductServiceImpl(ProductMapper productMapper,
+                              ProductSpecMapper productSpecMapper,
+                              ProductWarehouseStockMapper productWarehouseStockMapper){
         this.productMapper=productMapper;
         this.productSpecMapper=productSpecMapper;
+        this.productWarehouseStockMapper=productWarehouseStockMapper;
     }
 
     @Override
@@ -43,7 +52,36 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product selectProductByCode(String productCode) {
-        Product product= productMapper.selectProductByCode(productCode);
-        return product;
+        List<Product> productList= productMapper.selectProductByCode(productCode);
+        return CollectionUtils.isEmpty(productList) ? null:productList.get(0);
+    }
+
+    @Override
+    public void saveTransferProduct(List<TransferReq> transferReqList) {
+        //调拨记录插入
+        List<TransferReq> newTransferList=new ArrayList<>();
+        List<TransferReq> existTransferList=new ArrayList<>();
+        for (TransferReq transferReq: transferReqList) {
+            if(transferReq.getStockId()==null){
+                //数据插入
+                newTransferList.add(transferReq);
+            }else{
+                existTransferList.add(transferReq);
+            }
+        }
+        if(!CollectionUtils.isEmpty(newTransferList)){
+            productWarehouseStockMapper.batchInsert(transferReqList);
+        }
+        if(!CollectionUtils.isEmpty(existTransferList)){
+            productWarehouseStockMapper.batchUpdate(existTransferList);
+        }
+        //商品调拨商品数量修改
+        //productWarehouseStockMapper.batchInsert(transferReqList);
+
+    }
+
+    @Override
+    public List<Product> findProductWarehouseByProductCode(String productCode) {
+        return productMapper.selectProductStock(productCode);
     }
 }

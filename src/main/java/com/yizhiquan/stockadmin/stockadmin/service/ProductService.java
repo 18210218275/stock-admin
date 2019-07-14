@@ -2,6 +2,7 @@ package com.yizhiquan.stockadmin.stockadmin.service;
 
 import com.yizhiquan.stockadmin.stockadmin.domain.Product;
 import com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec;
+import com.yizhiquan.stockadmin.stockadmin.domain.dto.TransferReq;
 
 import java.util.List;
 
@@ -24,4 +25,17 @@ public interface ProductService {
      * @return
      */
     Product selectProductByCode(String productCode);
+
+    /**
+     * 保存调拨商品
+     * @param transferReqList
+     */
+    void saveTransferProduct(List<TransferReq> transferReqList);
+
+    /**
+     * 调拨商品查询
+     * @param productCode
+     * @return
+     */
+    List<Product> findProductWarehouseByProductCode(String productCode);
 }

@@ -50,7 +50,7 @@ CREATE TABLE `product` (
   `purchase_time` datetime DEFAULT NULL COMMENT '进货时间',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '添加商品时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
 
 /*Table structure for table `product_spec` */
 
@@ -60,12 +60,12 @@ CREATE TABLE `product_spec` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `product_id` int(11) DEFAULT NULL COMMENT '商品ID',
   `color` varchar(20) DEFAULT NULL COMMENT '颜色',
-  `size` int(2) DEFAULT NULL COMMENT '尺寸',
+  `size` varchar(30) DEFAULT NULL COMMENT '尺寸',
   `quantity` int(11) DEFAULT NULL COMMENT '数量',
   `purchase_time` varchar(50) DEFAULT NULL COMMENT '进货时间',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `product_store_upper` */
 
@@ -85,11 +85,14 @@ DROP TABLE IF EXISTS `product_warehouse_stock`;
 
 CREATE TABLE `product_warehouse_stock` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `product_code` varchar(100) DEFAULT NULL COMMENT '商品编码',
+  `product_spec_id` int(11) DEFAULT NULL COMMENT '商品属性主键',
+  `product_id` int(11) DEFAULT NULL COMMENT '商品主键',
   `warehouse_id` int(11) DEFAULT NULL COMMENT '仓库ID',
   `quantity` int(11) DEFAULT NULL COMMENT '件数',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='仓库存储商品数量';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='仓库存储商品数量';
 
 /*Table structure for table `sale_product` */
 
@@ -134,7 +137,7 @@ CREATE TABLE `warehouse` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COMMENT='仓库表';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -23,7 +23,12 @@
     function activePageMenu(){
         let pageName=$("input[name='currentPageMenuName']").val();
         //active open
-        if("warehouseList"===pageName||"storeList"===pageName||"brandList"===pageName){
+        if("warehouseList"===pageName
+            ||"storeList"===pageName
+            ||"brandList"===pageName
+            ||"productList"===pageName
+            ||"addProduct"===pageName
+            ||"transferProduct"===pageName){
             $("#"+pageName+"Page").addClass("active");
             $("#"+pageName+"Page").parent().parent().addClass("active open");
             let secondTitle=$("#"+pageName+"Page").find("a").html();

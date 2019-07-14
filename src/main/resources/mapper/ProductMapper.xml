@@ -16,14 +16,21 @@
     <result column="clothing_type" property="clothingType" jdbcType="INTEGER" />
     <!--<result column="purchase_time" property="purchaseTime" jdbcType="TIMESTAMP" />-->
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <collection property="productSpecList" javaType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec">
+    <collection property="productSpecList" ofType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec" >
       <result column="spec_id" property="id" jdbcType="INTEGER" />
       <result column="product_id" property="productId" jdbcType="INTEGER" />
       <result column="color" property="color" jdbcType="VARCHAR" />
-      <result column="size" property="size" jdbcType="INTEGER" />
-      <result column="quantity" property="quantity" jdbcType="INTEGER" />
+      <result column="size" property="size" jdbcType="VARCHAR" />
+      <result column="spec_quantity" property="quantity" jdbcType="INTEGER" />
       <result column="purchase_time" property="purchaseTime" jdbcType="VARCHAR" />
       <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <collection property="productWarehouseStockList" ofType="com.yizhiquan.stockadmin.stockadmin.domain.ProductWarehouseStock">
+        <result column="stock_id" jdbcType="INTEGER" property="id" />
+        <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+        <result column="stock_quantity" jdbcType="INTEGER" property="quantity" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      </collection>
     </collection>
   </resultMap>
   <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Product" >
@@ -132,19 +139,43 @@
   
   <select id="selectProductByCode" resultMap="BaseResultMap">
     SELECT
-      p.`id`,
-      p.`brand_id`,
-      p.`quantity`,
-      p.`market_price`,
-      p.`time_to_market`,
-      s.`purchase_time`,
-      s.`color`,
-      s.`size`,
-      s.`quantity`
+      p.id,
+      p.brand_id,
+      p.quantity,
+      p.market_price,
+      p.product_code,
+      p.product_name,
+      p.time_to_market,
+      s.id AS spec_id,
+      s.purchase_time,
+      s.color,
+      s.size,
+      s.quantity AS spec_quantity
     FROM
       product p
-      JOIN product_spec s
+      LEFT JOIN product_spec s
         ON p.`id` = s.`product_id`
     WHERE p.`product_code` = #{productCode}
+  </select>
+
+  <select id="selectProductStock" resultMap="BaseResultMap">
+    SELECT
+      pro.id,
+      pro.product_name,
+      pro.product_code,
+      sp.id AS spec_id,
+      sp.color,
+      sp.size,
+      sp.quantity AS spec_quantity,
+      st.quantity AS stock_quantity,
+      st.warehouse_id,
+      st.id AS stock_id
+    FROM
+      product pro
+      JOIN product_spec sp
+        ON pro.id = sp.product_id
+      JOIN product_warehouse_stock st
+        ON sp.id = st.product_spec_id
+    WHERE pro.product_code = #{productCode}
   </select>
 </mapper>

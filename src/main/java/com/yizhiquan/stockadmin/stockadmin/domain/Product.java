@@ -37,4 +37,6 @@ public class Product {
 
     private List<ProductSpec> productSpecList;
 
+    private List<ProductWarehouseStock> productWarehouseStockList;
+
 }

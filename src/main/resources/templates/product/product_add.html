@@ -25,24 +25,25 @@
                             <div class="card-body">
 
                                 <form class="form-horizontal">
+                                    <input type="hidden" id="productId" name="productId">
                                     <div class="form-group">
                                         <label for="productCode" class="col-sm-2 control-label">商品货号</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control"  name="productCode" id="productCode" placeholder="请输入商品货号">
+                                            <input type="text" class="form-control"  name="productCode" id="productCode" placeholder="请输入商品货号" >
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="productName" class="col-sm-2 control-label">商品名称</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="productName" placeholder="请输入商品名称">
+                                            <input type="text" class="form-control" id="productName" name="productName" placeholder="请输入商品名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label  class="col-sm-2 control-label">品牌</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control">
+                                            <select class="form-control" id="brandCode" name="brandCode">
                                                 <option value="">---请选择---</option>
-                                                <option th:each="brand : ${brandList}" th:value="${brand.brandCode}" th:text="${brand.brandNameCn
+                                                <option th:each="brand : ${brandList}" th:value="${brand.id}" th:text="${brand.brandNameCn
                                                 }"></option>
                                             </select>
                                         </div>
@@ -51,7 +52,7 @@
                                     <div class="form-group">
                                         <label for="marketPrice" class="col-sm-2 control-label">吊牌价</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="marketPrice" placeholder="请输入吊牌价">
+                                            <input type="text" class="form-control" id="marketPrice" name="marketPrice" placeholder="请输入吊牌价">
                                         </div>
                                     </div>
                                     <!--<div class="form-group">
@@ -77,7 +78,7 @@
                             </div>
                             <div class="toolbar-btn-action">
                                 <a class="btn btn-primary m-r-5"  id="addProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 录入商品数量</a>
-
+                                <a class="btn btn-primary m-r-5"  id="reviseProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i>解锁修改主信息</a>
                                 <!--<a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
                                 <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
                             </div>
@@ -97,14 +98,14 @@
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="warehouseTable">
+                                        <tbody id="productSpecTable">
 
                                         </tbody>
                                     </table>
 
                                 </div>
                                 <div style="align-content: center">
-                                    <a class="btn btn-success" style="margin-left: 45%;" href="#!"><i class="mdi mdi-check"></i> 保存</a>
+                                    <a class="btn btn-success" id="addNextProduct" style="margin-left: 45%;" href="javascript:void(0); "><i class="mdi mdi-check"></i> 录入新商品</a>
                                 </div>
                         </div>
                     </div>
@@ -116,7 +117,7 @@
         </main>
         <!--End 页面主要内容-->
         <!--Start 新增/编辑弹窗-->
-        <html th:replace="product/product_edit :: common" ></html>
+        <html th:replace="product/product_spec_edit :: common" ></html>
         <!--Start 新增/编辑弹窗-->
     </div>
 </div>
@@ -134,14 +135,15 @@
     $("input[name='productCode']").blur(function(){
         //调用接口
         let productCode=$(this).val();
-        //findProductByCode
         $.ajax({
             type: "GET",
             url: "/product/findProductByCode?productCode="+productCode,
+            dataType:"json",
             success: function(data){
-               console.info("返回数据： "+data.data);
-               if(null!=data.data){
+                let productData=data.data;
+               if(null!=productData){
                    //回显数据
+                   feedbackProduct(productData);
                }
             },
             error:function(){
@@ -150,9 +152,145 @@
         })
     });
 
+    /**
+     * 数据反馈
+     */
+    function feedbackProduct(product){
+        //回显主数据
+        $("input[name='productId']").val(product.id);
+        $("input[name='productCode']").val(product.productCode);
+        $("input[name='productName']").val(product.productName);
+        $("input[name='marketPrice']").val(product.marketPrice);
+        $("input[name='timeToMarket']").val(product.timeToMarket);
+        $("#brandCode option[value='"+product.brandId+"']").attr("selected","selected");
+        fillSpecProductData(product);
+    }
+
+    /**
+     * 回填商品详情表中的数据
+     */
+    function fillSpecProductData(product){
+        if(null!=product.productSpecList
+            && product.productSpecList.length>0){
+            let tableHtml="";
+            $.each(product.productSpecList,function(i,data){
+                tableHtml+="<tr>" +
+                    "<th>"+data.color+"</th>" +
+                    "<th>"+data.size+"</th>" +
+                    "<th>"+data.purchaseTime+"</th>" +
+                    "<th>"+data.quantity+"</th>" +
+                    "<th>操作</th>" +
+                    "</tr>"
+            });
+            $("#productSpecTable").empty().append(tableHtml);
+        }
+
+    }
+
     $("#addProduct").click(function () {
-        $("#productEditLabel").text("新增品牌");
+        // Step1 校验参数不为空
+        $("#productEditLabel").text("录入商品");
         $('#productEdit').modal();
+        //如果新增商品，保存商品主信息
+        let productId=$("input[name='productId']").val();
+        if(productId===null||productId===""){
+            saveMainProduct();
+        }
+        // Last 将文本框禁用
+        disableInput(true);
+    });
+
+    $("#addNextProduct").click(function(){
+        layer.confirm('您确定刷新录入新的商品吗？', {
+            btn: ['确定','取消'], //按钮
+            title: '提示'
+        }, function(){
+            window.location.href ="/product/edit";
+        }, function(){
+
+        });
+
+    });
+
+    $("#reviseProduct").click(function(){
+        disableInput(false);
+    })
+
+    /**
+     * 禁用文本框输入
+     */
+    function disableInput(isOpen){
+        //disabled
+        $("input[name='productCode']").attr("disabled",isOpen);
+        $("input[name='productName']").attr("disabled",isOpen);
+        $("input[name='marketPrice']").attr("disabled",isOpen);
+        $("input[name='timeToMarket']").attr("disabled",isOpen);
+        $("#brandCode").attr("disabled",isOpen);
+    }
+
+    /**
+     * 保存主体信息
+     */
+    function saveMainProduct(){
+        let productCode=$("input[name='productCode']").val();
+        let productName=$("input[name='productName']").val();
+        let marketPrice=$("input[name='marketPrice']").val();
+        let timeToMarket=$("input[name='timeToMarket']").val();
+        let brandCode=$("#brandCode").val();
+        let mainProduct={
+            "productCode": productCode,
+            "productName": productName,
+            "marketPrice": marketPrice,
+            "timeToMarket": timeToMarket,
+            "brandId": brandCode
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/product/saveMainProduct",
+            data: mainProduct,
+            dataType:"json",
+            success:function(data){
+                let productData=data.data;
+                $("input[name='productId']").val(productData.id);
+            }
+        });
+    }
+
+    /**
+     * 保存商品录入信息
+     */
+    $("#saveProductSpec").click(function(){
+        let productId=$("input[name='productId']").val();
+        let productColor=$("input[name='productColor']").val();
+        let productSize=$("#productSizeSelect").val();
+        let quantity=$("input[name='quantity']").val();
+        let purchaseTime=$("input[name='purchaseTime']").val();
+        let specData={
+            "productId": productId,
+            "color": productColor,
+            "size": productSize,
+            "quantity": quantity,
+            "purchaseTime": purchaseTime
+        }
+        $.ajax({
+            type: "POST",
+            url: "/product/saveProductSpec",
+            data: specData,
+            dataType:"json",
+            success:function(data){
+                let productSpecData=data.data;
+                let tableHtml="<tr specId='"+productSpecData.id+"'>" +
+                    "<th>"+productSpecData.color+"</th>" +
+                    "<th>"+productSpecData.size+"</th>" +
+                    "<th>"+productSpecData.purchaseTime+"</th>" +
+                    "<th>"+productSpecData.quantity+"</th>" +
+                    "<th>操作</th>" +
+                    "</tr>";
+                $("#productSpecTable").append(tableHtml);
+                $("#productEdit").modal("hide");
+            }
+        });
     });
 
     $("#saveStore").click(function () {
@@ -174,10 +312,10 @@
 
         }
         let brandReq={
-            "brandNameCn":brandNameCn,
+            "brandNameCn": brandNameCn,
             "brandNameEn": brandNameEn,
-            "brandCode":brandCode,
-            "type":type
+            "brandCode": brandCode,
+            "type": type
         }
 
         $.ajax({
