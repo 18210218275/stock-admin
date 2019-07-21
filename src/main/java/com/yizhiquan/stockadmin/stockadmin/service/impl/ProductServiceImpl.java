@@ -57,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
     public void saveTransferProduct(List<TransferReq> transferReqList) {
         //调拨记录插入
         List<TransferReq> newTransferList=new ArrayList<>();

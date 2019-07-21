@@ -85,12 +85,12 @@
   </insert>
 
   <update id="batchUpdate" parameterType="java.util.List">
-    <foreach collection="existTransferList" open="" close="" separator=";" item="transfer">
+    <foreach collection="existTransferList"  separator=";" item="transfer">
       update product_warehouse_stock
       <set>
-        warehouse_id=#{warehouseId,jdbcType=INTEGER}
+        warehouse_id=#{transfer.warehouseId,jdbcType=INTEGER}
       </set>
-      where id=#{stockId}
+      where id=#{transfer.stockId}
     </foreach>
   </update>
 </mapper>

@@ -54,6 +54,7 @@ public class WarehouseAction {
     @ResponseBody
     public ServiceResult findAllWarehouseList(){
         List<Warehouse> warehouseList=warehouseService.findAllWarehouseList();
+        System.out.println(JSON.toJSONString(warehouseList));
         return ResultWrapper.success(warehouseList);
     }
 }

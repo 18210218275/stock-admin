@@ -91,11 +91,10 @@ public class ProductAction {
         return modelAndView;
     }
 
-    @PostMapping("/saveTransfer")
+    @RequestMapping(value = "/saveTransfer" )
     @ResponseBody
     public ServiceResult saveTransferProduct(@RequestBody List<TransferReq> transferReqList){
         productService.saveTransferProduct(transferReqList);
-
         return ResultWrapper.success();
     }
 

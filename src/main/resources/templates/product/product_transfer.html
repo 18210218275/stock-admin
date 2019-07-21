@@ -106,7 +106,7 @@
 <script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <script src="/js/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 <script type="text/javascript">
-    var warehouseList;
+    var warehouse;
     $(function(){
         // loadPageList();
         loadWarehouseList();
@@ -116,9 +116,10 @@
         $.ajax({
             type:"GET",
             url:"/warehouse/findAllList",
+            dataType:"json",
             success:function(data){
                 let warehouseList=data.data;
-                warehouseList=warehouseList;
+                warehouse=warehouseList;
             },
             error:function(){
 
@@ -143,6 +144,15 @@
         });
     });
 
+    function getSelectWarehouse(){
+        let selectHtml="";
+        $.each(warehouse,function(i,item){
+            selectHtml+="<option value='"+item.id+"'>"+item.warehouseName+"</option>";
+        });
+        return selectHtml;
+    }
+
+
     function fillTransferTable(productList){
         //
         if(productList!=null&&productList.length>0){
@@ -164,13 +174,14 @@
                             " <th>" +
                             "<select class=\"form-control in_transfer\">" +
                             "<option value=\"\">---请选择---</option>" +
+                            getSelectWarehouse()+
                             "< /select>" +
                             "</th>" +
                             "<th>" +
                             "<div class=\"btn-group\">" +
-                            "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"拆分\" data-toggle=\"tooltip\"><i class=\"mdi mdi-sitemap\"></i></a>" +
+                            "<a class=\"btn btn-xs btn-default split-transfer-warehouse\" href=\"javascript:void(0);\" title=\"拆分\" data-toggle=\"tooltip\"><i class=\"mdi mdi-sitemap\"></i></a>" +
                             "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
-                            "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                            "<a class=\"btn btn-xs btn-default delete-transfer\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                             "</div>" +
                             "</th>" +
                             "</tr>";
@@ -180,6 +191,12 @@
             $("#transferProductTable").append(transferTable);
         }
     }
+
+    $(".split-transfer-warehouse").click(function(){
+        //点击事件
+        let trHtml=$(this).parent().parent().parent().html();
+        console.info(trHtml);
+    });
 
     $("#saveTransferBut").click(function(){
         //保存调拨商品
@@ -191,16 +208,16 @@
             let productId=$(this).attr("productId");
             let stockId=$(this).attr("stockId");
             let quantity=$(this).find("input[name='quantity']").val();
+            let warehouseId=$(this).find("option:selected").val();
             let transfer={
                 "productId": productId,
                 "specId": specId,
                 "quantity": quantity,
-                "warehouse":1,
+                "warehouseId":warehouseId,
                 "stockId": stockId
             }
             transferArr.push(transfer);
         });
-
         $.ajax({
             type: "POST",
             url: "/product/saveTransfer",
