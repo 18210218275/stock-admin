@@ -10,6 +10,9 @@
     <result column="purchase_time" jdbcType="VARCHAR" property="purchaseTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+  <sql id="BaseColumns">
+    id,product_id,color,size,quantity,purchase_time,create_time
+  </sql>
   <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec">
     insert into product_spec (id, product_id, color, 
       size, quantity, purchase_time, 
@@ -67,4 +70,23 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="selectProductBySpec" resultMap="BaseResultMap">
+    SELECT
+      <include refid="BaseColumns"/>
+    FROM
+      product_spec
+    WHERE color = #{color}
+      AND size = #{size}
+      AND product_id = #{productId}
+  </select>
+
+  <update id="updateProductStock"  parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec">
+     UPDATE
+        product_spec
+     SET
+        quantity = #{quantity}
+     WHERE id = #{id}
+
+  </update>
 </mapper>

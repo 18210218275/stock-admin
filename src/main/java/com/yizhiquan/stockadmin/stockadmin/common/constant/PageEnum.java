@@ -18,7 +18,9 @@ public enum PageEnum {
 
     ADD_PRODUCT_PAGE("addProduct","录入商品页"),
 
-    TRANSFER_PRODUCT_PAGE("transferProduct","调拨商品页");
+    TRANSFER_PRODUCT_PAGE("transferProduct","调拨商品页"),
+
+    SALES_PRODUCT_PAGE("saleProduct","销售页面");
 
     private String pageCode;
 

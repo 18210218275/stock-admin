@@ -40,7 +40,7 @@
                                     </div>
                                 </form>
                                 <div class="toolbar-btn-action">
-                                    <a class="btn btn-primary m-r-5"  id="addWarehouse" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 新增</a>
+                                    <a class="btn btn-primary m-r-5"  id="addSalesProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 新增</a>
                                     <!--<a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
                                     <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
                                     <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
@@ -53,15 +53,19 @@
                                         <thead>
                                         <tr>
                                             <th>编号</th>
-                                            <th>仓库名称</th>
-                                            <th>仓库地址</th>
-                                            <th>仓库类型</th>
-                                            <th>创建时间</th>
-                                            <th>备注</th>
+                                            <th>商品货号</th>
+                                            <th>商品名称</th>
+                                            <th>颜色</th>
+                                            <th>尺寸</th>
+                                            <th>件数</th>
+                                            <th>销售总价</th>
+                                            <th>销售员</th>
+                                            <th>销售店铺</th>
+                                            <th>销售时间</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="warehouseTable">
+                                        <tbody id="brandTable">
 
                                         </tbody>
                                     </table>
@@ -70,6 +74,7 @@
                                 <input type="hidden" name="pageNum" value="1" >
                                 <input type="hidden" name="pageSize" value="10">
                                 <div id="Paginator" style="text-align: center"> <ul id="pageLimit"></ul> </div>
+
 
                             </div>
                         </div>
@@ -82,7 +87,7 @@
         </main>
         <!--End 页面主要内容-->
         <!--Start 新增/编辑弹窗-->
-        <html th:replace="warehouse/warehouse_edit :: common" ></html>
+        <html th:replace="sale/sale_edit :: common" ></html>
         <!--Start 新增/编辑弹窗-->
     </div>
 </div>
@@ -93,56 +98,77 @@
 <script type="text/javascript">
     $(function(){
         loadPageList();
-
-    })
-
-    $("#addWarehouse").click(function () {
-        $("#warehouseEditLabel").text("新增仓库");
-        $('#warehouseEdit').modal();
-
-    });
-    //点击保存
-    $("#saveWarehouse").click(function(){
-        saveWarehouse();
     });
 
-    function saveWarehouse() {
-        let warehouseName =$("input[name='warehouseName']").val();
-        let warehouseAddress=$("input[name='warehouseAddress']").val();
-        let warehouseType=$("input[name='warehouseType']").val();
-        let buildDate=$("input[name='buildDate']").val();
-        let remarks=$("input[name='remarks']").val();
-        if(typeof warehouseName == "undefined" || warehouseName == null || warehouseName == ""){
-            layer.tips('仓库名称不能为空','#warehouseName', {
-                tips: [3, '#ff6666'],
-                time: 2000
-            });
-            return ;
-        }
-        if(typeof warehouseAddress == "undefined" || warehouseAddress == null || warehouseAddress == ""){
-            layer.tips('仓库地址不能为空','#warehouseName', {
-                tips: [3, '#ff6666'],
-                time: 2000
-            });
-        }
+    $("#addSalesProduct").click(function () {
+        $("#saleProductEditLabel").text("录入销售信息");
+        $('#saleProductEdit').modal();
+    });
 
-        let warehouseReq={
-            "warehouseName":warehouseName,
-            "warehouseAddress":warehouseAddress,
-            "type":warehouseType,
-            "buildDate":buildDate,
-            "remarks":remarks
+    $("#saveSaleProduct").click(function () {
+        $(this).attr("disabled","disabled");
+        saveStore();
+        $(this).removeAttr("disabled");
+    });
+
+    //检测商品是否已经录入过
+    $("input[name='productCode']").blur(function(){
+        //调用接口
+        let productCode=$(this).val();
+        $.ajax({
+            type: "GET",
+            url: "/product/findProductByCode?productCode="+productCode,
+            dataType:"json",
+            success: function(data){
+                let productData=data.data;
+                if(null!=productData){
+                    //回显数据
+                    //feedbackProduct(productData);
+                    $("input[name='productId']").val(productData.id);
+                }
+            },
+            error:function(){
+
+            }
+        })
+    });
+
+    function saveStore(){
+        let productCode=$("input[name='productCode']").val();
+        let productName=$("input[name='productName']").val();
+        let storeId=$("input[name='storeId']").val();
+        let salesperson=$("input[name='salesperson']").val();
+        let quantity=$("input[name='quantity']").val();
+        let totalMoney=$("input[name='totalMoney']").val();
+        let color=$("input[name='color']").val();
+        let size=$("#productSizeSelect").val();
+        let saleTime=$("input[name='saleTime']").val();
+
+
+        if(typeof productCode=='undefined' || productCode==null|| productCode==""){
+
         }
+        if(typeof productName=='undefined' || productName==null || productName==""){
 
-
+        }
+        let saleProductReq = {
+            "productCode":productCode,
+            "productName": productName,
+            "storeId":storeId,
+            "salesperson":salesperson,
+            "quantity":quantity,
+            "totalMoney": totalMoney,
+            "color":color,
+            "size":size,
+            "saleTime":saleTime
+        }
         $.ajax({
             type: "POST",
-            url: "/warehouse/saveWarehouse",
-            data: warehouseReq,
+            url: "/sale/saveSaleProduct",
+            data: saleProductReq ,
             dataType:"json",
-            success: function(msg){
-                console.info(msg.warehouseName)
-                $("#warehouseEdit").modal("hide");
+            success: function(data){
+                $("#saleProductEdit").modal("hide");
                 layer.msg('保存成功', {
                     offset: 't',
                     anim: 5,
@@ -150,12 +176,8 @@
                     time: 2000
                 });
                 loadPageList();
-            },
-            error:function(){
-
             }
         })
-
     }
 
     function loadPageList(){
@@ -163,12 +185,13 @@
         let pageSize=$("input[name='pageSize']").val();
         $.ajax({
             type: "GET",
-            url: "/warehouse/findList",
+            url: "/sale/findList",
             data: "pageNum="+pageNum+"&pageSize="+pageSize,
             dataType:"json",
             success: function(msg){
                 fillDataToTable(msg.data);
                 loadPage(msg.pageNum,msg.totalPage);
+                console.info(msg)
             },
             error:function(){
 
@@ -176,32 +199,27 @@
         })
     }
 
-    function fillDataToTable(dataList){
-        if(dataList!=null&&dataList.length>0){
+    function fillDataToTable(brandList){
+        if(brandList!=null&&brandList.length>0){
             let tableHtml="";
-            $.each( dataList, function(index, item){
-                let warehouseType="";
-                if(item.type==0){
-                    warehouseType="主仓";
-                }else if(item.type==1){
-                    warehouseType="店铺仓";
-                }
+            $.each(brandList,function (index,item) {
                 tableHtml+="<tr>"
-                        +"<td>"+(index+1)+"</td>"
-                        +"<td>"+item.warehouseName+"</td>"
-                        +"<td>"+item.warehouseAddress+"</td>"
-                        +"<td>"+warehouseType+"</td>"
-                        +"<td>"+item.buildDate+"</td>"
-                        +"<td>"+item.createTime+"</td>"
-                        +"<td>"+item.remarks+"</td>"
-                        + "<td><div class=\"btn-group\">" +
+                    +"<td>"+(index+1)+"</td>"
+                    +"<td>"+item.productCode+"</td>"
+                    +"<td>"+item.productName+"</td>"
+                    +"<td>"+item.color+"</td>"
+                    +"<td>"+item.size+"</td>"
+                    +"<td>"+item.quantity+"</td>"
+                    +"<td>"+item.totalMoney+"</td>"
+                    +"<td>"+item.salesperson+"</td>"
+                    +"<td>"+item.storeId+"</td>"
+                    +"<td>"+item.saleTime+"</td>"
+                    +"<td><div class=\"btn-group\">" +
                     " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
                     "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                     "</div></td>";
-
-            });
-
-            $("#warehouseTable").empty().append(tableHtml);
+            })
+            $("#brandTable").empty().append(tableHtml);
         }
     }
 
@@ -229,6 +247,11 @@
 
         });
     }
+
+
+
+
+
 
 </script>
 </body>

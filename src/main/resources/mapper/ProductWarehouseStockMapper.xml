@@ -76,7 +76,7 @@
       quantity
     )
     VALUES
-        <foreach collection="transferList" item="transfer" open="(" close=")" separator=",">
+        <foreach close=")" collection="transferList" item="transfer" open="(" separator=",">
           #{specId,jdbcType=INTEGER},
           #{productId,jdbcType=INTEGER},
           #{warehouseId,jdbcType=INTEGER},
@@ -85,7 +85,7 @@
   </insert>
 
   <update id="batchUpdate" parameterType="java.util.List">
-    <foreach collection="existTransferList"  separator=";" item="transfer">
+    <foreach collection="existTransferList" item="transfer" separator=";">
       update product_warehouse_stock
       <set>
         warehouse_id=#{transfer.warehouseId,jdbcType=INTEGER}

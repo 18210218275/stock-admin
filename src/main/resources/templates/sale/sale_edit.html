@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<html th:fragment="common">
+<div class="modal fade" id="saleProductEdit" tabindex="-1" role="dialog" aria-labelledby="saleProductEditLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="saleProductEditLabel">新增</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="productId">
+                <input type="hidden" name="productSpecId">
+                <div class="form-group">
+                    <label for="productCode">商品货号：</label>
+                    <input type="text" name="productCode" class="form-control" id="productCode" placeholder="请输入品牌中文名">
+                </div>
+                <div class="form-group">
+                    <label for="productName">商品名称：</label>
+                    <input type="text" name="productName" class="form-control" id="productName" placeholder="请输入品牌英文名">
+                </div>
+                <div class="form-group">
+                    <label >尺码：</label>
+                    <!-- <input type="text" name="brandCode" class="form-control" id="brandCode" placeholder="请输入编号">-->
+                    <select class="form-control" name="productSize" id="productSizeSelect">
+                        <option value="">---请选择尺寸---</option>
+                        <option value="160/42/XS">160/42/XS</option>
+                        <option value="165/44/S">165/44/S</option>
+                        <option value="170/46/M">170/46/M</option>
+                        <option value="175/48/L">175/48/L</option>
+                        <option value="180/50/XL">180/50/XL</option>
+                        <option value="185/52/XXL">185/52/XXL</option>
+                        <option value="190/54/XXXL">190/54/XXXL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="color">颜色：</label>
+                    <input type="text" name="color" class="form-control" id="color" placeholder="请输入颜色">
+                </div>
+                <div class="form-group">
+                    <label for="quantity">件数：</label>
+                    <input type="text" name="quantity" class="form-control" id="quantity" placeholder="请输入销售件数">
+                </div>
+                <div class="form-group">
+                    <label for="totalMoney">总价：</label>
+                    <input type="text" name="totalMoney" class="form-control" id="totalMoney" placeholder="请输入销售总价">
+                </div>
+                <div class="form-group">
+                    <label for="salesperson">销售员：</label>
+                    <input type="text" name="salesperson" class="form-control" id="salesperson" placeholder="请输入销售员">
+                </div>
+                <div class="form-group">
+                    <label for="saleTime">销售时间：</label>
+                    <input class="form-control js-datepicker m-b-10 readonly" type="text" id="saleTime" name="saleTime" placeholder="yyyy-mm-dd" value="" data-date-format="yyyy-mm-dd" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</div>
+                <!--<button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>-->
+                <div type="button" class="btn btn-primary" id="saveSaleProduct">保存</div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

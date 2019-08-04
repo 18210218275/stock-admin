@@ -1,63 +1,111 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yizhiquan.stockadmin.stockadmin.dao.SaleProductMapper" >
-  <resultMap id="BaseResultMap" type="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct" >
-    <result column="id" property="id" jdbcType="INTEGER" />
-    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
-    <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="sale_time" property="saleTime" jdbcType="TIMESTAMP" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="total_money" property="totalMoney" jdbcType="DOUBLE" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yizhiquan.stockadmin.stockadmin.dao.SaleProductMapper">
+  <resultMap id="BaseResultMap" type="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="store_id" jdbcType="INTEGER" property="storeId" />
+    <result column="salesperson" jdbcType="VARCHAR" property="salesperson" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="sale_time" jdbcType="DATE" property="saleTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="total_money" jdbcType="DOUBLE" property="totalMoney" />
+    <result column="color" jdbcType="VARCHAR" property="color" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
   </resultMap>
-  <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct" >
-    insert into sale_product (id, product_code, quantity, 
-      sale_time, create_time, total_money
-      )
-    values (#{id,jdbcType=INTEGER}, #{productCode,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
-      #{saleTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{totalMoney,jdbcType=DOUBLE}
-      )
+  <sql id="BaseColumns">
+        id,product_code,product_name,store_id,salesperson,quantity,sale_time,create_time,total_money,
+        color,size
+  </sql>
+  <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct">
+    insert into sale_product (id, product_code, product_name, 
+      store_id, salesperson, quantity, 
+      sale_time, create_time, total_money, 
+      color, size)
+    values (#{id,jdbcType=INTEGER}, #{productCode,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{storeId,jdbcType=INTEGER}, #{salesperson,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
+      #{saleTime,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, #{totalMoney,jdbcType=DOUBLE}, 
+      #{color,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct" >
+  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct">
     insert into sale_product
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="productCode != null" >
+      <if test="productCode != null">
         product_code,
       </if>
-      <if test="quantity != null" >
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="salesperson != null">
+        salesperson,
+      </if>
+      <if test="quantity != null">
         quantity,
       </if>
-      <if test="saleTime != null" >
+      <if test="saleTime != null">
         sale_time,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="totalMoney != null" >
+      <if test="totalMoney != null">
         total_money,
       </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="productCode != null" >
+      <if test="productCode != null">
         #{productCode,jdbcType=VARCHAR},
       </if>
-      <if test="quantity != null" >
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="salesperson != null">
+        #{salesperson,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
         #{quantity,jdbcType=INTEGER},
       </if>
-      <if test="saleTime != null" >
-        #{saleTime,jdbcType=TIMESTAMP},
+      <if test="saleTime != null">
+        #{saleTime,jdbcType=DATE},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="totalMoney != null" >
+      <if test="totalMoney != null">
         #{totalMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
+
+  <select id="selectSaleProduct" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumns"/>
+        from
+        sale_product
+  </select>
 </mapper>

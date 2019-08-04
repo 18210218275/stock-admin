@@ -1,19 +1,16 @@
-package com.yizhiquan.stockadmin.stockadmin.domain;
+package com.yizhiquan.stockadmin.stockadmin.domain.vo;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class SaleProduct {
+public class SaleProductVo  {
     private Integer id;
+
+    private Integer productId;
 
     private String productCode;
 
@@ -24,9 +21,9 @@ public class SaleProduct {
     private String salesperson;
 
     private Integer quantity;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date saleTime;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+
+    private String saleTime;
+
     private Date createTime;
 
     private Double totalMoney;

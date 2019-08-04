@@ -20,12 +20,12 @@
                             <!--<li> <a href="lyear_ui_cards.html">卡片</a> </li>-->
                         </ul>
                     </li>
-                    <li class="nav-item nav-item-has-subnav">
+                    <!--<li class="nav-item nav-item-has-subnav">
                         <a href="javascript:void(0)"><i class="mdi mdi-format-align-justify"></i> 品牌管理</a>
                         <ul class="nav nav-subnav">
                             <li> <a href="lyear_forms_elements.html">查询列表</a> </li>
                         </ul>
-                    </li><!--active open-->
+                    </li>--><!--active open-->
                     <li class="nav-item nav-item-has-subnav ">
                         <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 商品管理</a>
                         <ul class="nav nav-subnav">
@@ -37,8 +37,14 @@
                     <li class="nav-item nav-item-has-subnav">
                         <a href="javascript:void(0)"><i class="mdi mdi-language-javascript"></i> 销售商品</a>
                         <ul class="nav nav-subnav">
-                            <li> <a href="lyear_js_datepicker.html">销售记录</a> </li>
-                            <li> <a href="lyear_js_sliders.html">销售添加</a> </li>
+                            <li id="saleProductPage"> <a href="lyear_js_datepicker.html" th:href="@{/sale/list}">销售记录</a> </li>
+                           <!-- <li> <a href="lyear_js_sliders.html">销售添加</a> </li>-->
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-item-has-subnav">
+                        <a href="javascript:void(0)"><i class="mdi mdi-format-align-justify"></i> 数据统计</a>
+                        <ul class="nav nav-subnav">
+                            <li> <a href="lyear_forms_elements.html">查询列表</a> </li>
                         </ul>
                     </li>
                 </ul>

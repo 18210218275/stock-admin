@@ -1,11 +1,17 @@
 package com.yizhiquan.stockadmin.stockadmin.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductSpec {
     private Integer id;
 
