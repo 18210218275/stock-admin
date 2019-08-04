@@ -2,6 +2,8 @@ package com.yizhiquan.stockadmin.stockadmin.controller.store;
 
 import com.alibaba.fastjson.JSON;
 import com.yizhiquan.stockadmin.stockadmin.common.constant.PageEnum;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ResultWrapper;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ServiceResult;
 import com.yizhiquan.stockadmin.stockadmin.domain.Store;
 import com.yizhiquan.stockadmin.stockadmin.domain.vo.PageData;
 import com.yizhiquan.stockadmin.stockadmin.service.StoreService;
@@ -46,6 +48,20 @@ public class StoreAction {
     public String findList(@RequestParam("pageNum") int pageNum,@RequestParam("pageSize") int pageSize){
         PageData<Store> storeList=storeService.findStoreList(pageNum,pageSize);
         return JSON.toJSONString(storeList);
+    }
+
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public ServiceResult deleteStore(@RequestParam("id") Integer id){
+        storeService.deleteStore(id);
+        return ResultWrapper.success();
+    }
+
+    @GetMapping("/getStoreById")
+    @ResponseBody
+    public ServiceResult getStoreById(@RequestParam("id") Integer id){
+        Store store=storeService.getStoreById(id);
+        return ResultWrapper.success(store);
     }
 
 }

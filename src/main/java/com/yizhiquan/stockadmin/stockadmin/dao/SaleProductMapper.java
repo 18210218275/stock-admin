@@ -2,8 +2,7 @@ package com.yizhiquan.stockadmin.stockadmin.dao;
 
 import com.github.pagehelper.Page;
 import com.yizhiquan.stockadmin.stockadmin.domain.SaleProduct;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface SaleProductMapper {
     int insert(SaleProduct record);
@@ -13,4 +12,7 @@ public interface SaleProductMapper {
     Page<SaleProduct> selectSaleProduct();
 
 
+    void deleteSaleProduct(@Param("id") Integer id);
+
+    SaleProduct selectSaleProductById(@Param("id") Integer id);
 }

@@ -114,6 +114,7 @@
         let manager=$("input[name='manager']").val();
         let telephone=$("input[name='telephone']").val();
         let startBusinessTime=$("input[name='startBusinessTime']").val();
+        let storeId=$("input[name='id']").val();
         if(typeof storeName=='undefined' || storeName==null|| storeName==""){
 
         }
@@ -125,7 +126,8 @@
             "storeAddress": storeAddress,
             "manager":manager,
             "telephone":telephone,
-            "startBusinessTime":startBusinessTime
+            "startBusinessTime":startBusinessTime,
+            "id":storeId
         }
 
         $.ajax({
@@ -181,12 +183,54 @@
                     +"<td>"+item.startBusinessTime+"</td>"
                     +"<td>"+item.createTime+"</td>"
                     +"<td><div class=\"btn-group\">" +
-                    " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
-                    "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    " <a class=\"btn btn-xs btn-default\" onclick='editStore("+item.id+")'href=\"javascript:void(0);\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default\" onclick='deleteStore("+item.id+")' href=\"javascript:void(0);\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                     "</div></td>";
             })
             $("#storeTable").empty().append(tableHtml);
         }
+    }
+
+    function deleteStore(id){
+        layer.confirm('您确定要删除该仓库吗？', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                type: "DELETE",
+                url: "/store/delete",
+                data: "id="+id,
+                dataType:"json",
+                success: function(msg){
+                    layer.close(index);
+                    if(200==msg.code){
+                        loadPageList();
+                    }
+                }
+            })
+
+        });
+    }
+
+    function editStore(id){
+        //查询出来信息
+        $.ajax({
+            type: "GET",
+            url: "/store/getStoreById",
+            data: "id="+id,
+            dataType:"json",
+            success: function(msg){
+                console.info(msg);
+                if(200==msg.code){
+                    let store=msg.data;
+                    $("#storeEditLabel").text("修改店铺信息");
+                    $('#storeEdit').modal();
+                    $("input[name='storeName']").val(store.storeName);
+                    $("input[name='storeAddress']").val(store.storeAddress);
+                    $("input[name='manager']").val(store.manager);
+                    $("input[name='telephone']").val(store.telephone);
+                    $("input[name='startBusinessTime']").val(store.startBusinessTime);
+                    $("input[name='id']").val(store.id);
+                }
+            }
+        })
     }
 
     function loadPage(currentPage,total){

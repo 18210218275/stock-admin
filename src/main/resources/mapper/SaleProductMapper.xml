@@ -108,4 +108,21 @@
         from
         sale_product
   </select>
+
+  <delete id="deleteSaleProduct" >
+    DELETE
+    FROM
+        sale_product
+    WHERE
+      id=#{id}
+  </delete>
+
+  <select id="selectSaleProductById" resultMap="BaseResultMap">
+    SELECT
+        *
+    FROM
+        sale_product
+    WHERE
+        id=#{id}
+  </select>
 </mapper>

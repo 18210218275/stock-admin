@@ -69,7 +69,6 @@
 
                                         </tbody>
                                     </table>
-
                                 </div>
                                 <input type="hidden" name="pageNum" value="1" >
                                 <input type="hidden" name="pageSize" value="10">
@@ -143,6 +142,7 @@
         let color=$("input[name='color']").val();
         let size=$("#productSizeSelect").val();
         let saleTime=$("input[name='saleTime']").val();
+        let saleId=$("input[name='id']").val();
 
 
         if(typeof productCode=='undefined' || productCode==null|| productCode==""){
@@ -160,7 +160,8 @@
             "totalMoney": totalMoney,
             "color":color,
             "size":size,
-            "saleTime":saleTime
+            "saleTime":saleTime,
+            "id":saleId
         }
         $.ajax({
             type: "POST",
@@ -215,12 +216,57 @@
                     +"<td>"+item.storeId+"</td>"
                     +"<td>"+item.saleTime+"</td>"
                     +"<td><div class=\"btn-group\">" +
-                    " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
-                    "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default\" onclick='deleteSale("+item.id+")' href=\"javascript:void(0);\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                     "</div></td>";
             })
             $("#brandTable").empty().append(tableHtml);
         }
+    }
+
+    function deleteSale(id){
+        layer.confirm('您确定要删除销售记录吗？', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                type: "DELETE",
+                url: "/sale/delete",
+                data: "id="+id,
+                dataType:"json",
+                success: function(msg){
+                    layer.close(index);
+                    if(200==msg.code){
+                        loadPageList();
+                    }
+                }
+            })
+
+        });
+    }
+
+    function editSale(id){
+        //查询出来信息
+        $.ajax({
+            type: "GET",
+            url: "/sale/getSaleById",
+            data: "id="+id,
+            dataType:"json",
+            success: function(msg){
+                if(200==msg.code){
+                    let saleProduct=msg.data;
+                    console.info(saleProduct);
+                    $("#saleProductEditLabel").text("录入销售信息");
+                    $('#saleProductEdit').modal();
+                    $("input[name='id']").val(saleProduct.id);
+                    $("input[name='productCode']").val(saleProduct.productCode);
+                    $("input[name='productName']").val(saleProduct.productName);
+                    $("input[name='storeId']").val(saleProduct.storeId);
+                    $("input[name='salesperson']").val(saleProduct.salesperson);
+                    $("input[name='quantity']").val(saleProduct.quantity);
+                    $("input[name='totalMoney']").val(saleProduct.totalMoney);
+                    $("input[name='color']").val(saleProduct.color);
+                    $("#productSizeSelect option[value='"+saleProduct.size+"']").attr("selected","selected");
+                    $("input[name='saleTime']").val(saleProduct.saleTime);
+                }
+            }
+        })
     }
 
     function loadPage(currentPage,total){

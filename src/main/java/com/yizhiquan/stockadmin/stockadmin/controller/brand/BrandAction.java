@@ -2,6 +2,8 @@ package com.yizhiquan.stockadmin.stockadmin.controller.brand;
 
 import com.alibaba.fastjson.JSON;
 import com.yizhiquan.stockadmin.stockadmin.common.constant.PageEnum;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ResultWrapper;
+import com.yizhiquan.stockadmin.stockadmin.common.exception.ServiceResult;
 import com.yizhiquan.stockadmin.stockadmin.domain.Brand;
 import com.yizhiquan.stockadmin.stockadmin.domain.vo.PageData;
 import com.yizhiquan.stockadmin.stockadmin.service.BrandService;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.xml.transform.Result;
 import java.util.List;
 
 @Controller
@@ -50,5 +53,19 @@ public class BrandAction {
     public String findAllBrand(){
         List<Brand> brandList=brandService.findAllBrand();
         return JSON.toJSONString(brandList);
+    }
+
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public ServiceResult deleteBrand(@RequestParam("id") Integer id){
+        brandService.deleteBrand(id);
+        return ResultWrapper.success();
+    }
+
+    @GetMapping("/getBrandById")
+    @ResponseBody
+    public ServiceResult getBrandById(@RequestParam("id") Integer id){
+        Brand brand=brandService.getBrandById(id);
+        return ResultWrapper.success(brand);
     }
 }

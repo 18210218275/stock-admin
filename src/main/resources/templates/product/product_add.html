@@ -77,8 +77,9 @@
 
                             </div>
                             <div class="toolbar-btn-action">
-                                <a class="btn btn-primary m-r-5"  id="addProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 录入商品数量</a>
-                                <a class="btn btn-primary m-r-5"  id="reviseProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i>解锁修改主信息</a>
+                                <a class="btn btn-primary m-r-5"  id="saveProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 保存主信息</a>
+                                <a class="btn btn-primary m-r-5 hidden"  id="reviseProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i>解锁修改主信息</a>
+                                <a class="btn btn-primary m-r-5 hidden"  id="addProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 录入商品数量</a>
                                 <!--<a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
                                 <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
                             </div>
@@ -135,6 +136,9 @@
     $("input[name='productCode']").blur(function(){
         //调用接口
         let productCode=$(this).val();
+        if(productCode==null||productCode==""){
+            return ;
+        }
         $.ajax({
             type: "GET",
             url: "/product/findProductByCode?productCode="+productCode,
@@ -142,6 +146,11 @@
             success: function(data){
                 let productData=data.data;
                if(null!=productData){
+                   // Last 将文本框禁用
+                   disableInput(true);
+                   $("#saveProduct").addClass("hidden");
+                   $("#addProduct").removeClass("hidden");
+                   $("#reviseProduct").removeClass("hidden");
                    //回显数据
                    feedbackProduct(productData);
                }
@@ -163,6 +172,7 @@
         $("input[name='marketPrice']").val(product.marketPrice);
         $("input[name='timeToMarket']").val(product.timeToMarket);
         $("#brandCode option[value='"+product.brandId+"']").attr("selected","selected");
+        $("#productSpecTable").empty();
         fillSpecProductData(product);
     }
 
@@ -174,30 +184,50 @@
             && product.productSpecList.length>0){
             let tableHtml="";
             $.each(product.productSpecList,function(i,data){
-                tableHtml+="<tr>" +
+                tableHtml+="<tr specId='"+data.id+"'>" +
                     "<th>"+data.color+"</th>" +
                     "<th>"+data.size+"</th>" +
                     "<th>"+data.purchaseTime+"</th>" +
                     "<th>"+data.quantity+"</th>" +
-                    "<th>操作</th>" +
+                    "<th><div class=\"btn-group\">" +
+                    " <a class=\"btn btn-xs btn-default\" onclick='editProductSpec("+data.id+")' href=\"javascript:void(0)\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default\" onclick='deleteProductSpec("+data.id+")' href=\"javascript:void(0)\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    "</div></th>" +
                     "</tr>"
             });
             $("#productSpecTable").empty().append(tableHtml);
         }
-
     }
+
+    function saveProduct(){
+        let productId=$("input[name='productId']").val();
+
+        saveMainProduct();
+
+        // Last 将文本框禁用
+        disableInput(true);
+        $("#saveProduct").addClass("hidden");
+        $("#addProduct").removeClass("hidden");
+        $("#reviseProduct").removeClass("hidden");
+    }
+    
+    $("#saveProduct").click(function () {
+        saveProduct();
+    })
+
+
 
     $("#addProduct").click(function () {
         // Step1 校验参数不为空
         $("#productEditLabel").text("录入商品");
         $('#productEdit').modal();
+        $("input[name='productColor']").attr("disabled",false);
+        $("#productSizeSelect").attr("disabled",false);
+        $("input[name='productColor']").val("");
+        $("input[name='quantity']").val("");
+        //$("#")
         //如果新增商品，保存商品主信息
-        let productId=$("input[name='productId']").val();
-        if(productId===null||productId===""){
-            saveMainProduct();
-        }
-        // Last 将文本框禁用
-        disableInput(true);
+        //saveProduct();
     });
 
     $("#addNextProduct").click(function(){
@@ -214,6 +244,8 @@
 
     $("#reviseProduct").click(function(){
         disableInput(false);
+        $("#saveProduct").removeClass("hidden");
+        $("#reviseProduct").addClass("hidden");
     })
 
     /**
@@ -232,6 +264,7 @@
      * 保存主体信息
      */
     function saveMainProduct(){
+        let productId=$("input[name='productId']").val();
         let productCode=$("input[name='productCode']").val();
         let productName=$("input[name='productName']").val();
         let marketPrice=$("input[name='marketPrice']").val();
@@ -242,7 +275,8 @@
             "productName": productName,
             "marketPrice": marketPrice,
             "timeToMarket": timeToMarket,
-            "brandId": brandCode
+            "brandId": brandCode,
+            "id": productId
         }
 
         $.ajax({
@@ -251,8 +285,13 @@
             data: mainProduct,
             dataType:"json",
             success:function(data){
-                let productData=data.data;
-                $("input[name='productId']").val(productData.id);
+                if(data.code==200){
+                    let productData=data.data;
+                    $("input[name='productId']").val(productData.id);
+                }else{
+                    layer.alert('录入商品失败', {icon: 2});
+                }
+
             }
         });
     }
@@ -261,6 +300,7 @@
      * 保存商品录入信息
      */
     $("#saveProductSpec").click(function(){
+        let productSpecId=$("input[name='productSpecId']").val();
         let productId=$("input[name='productId']").val();
         let productColor=$("input[name='productColor']").val();
         let productSize=$("#productSizeSelect").val();
@@ -271,7 +311,8 @@
             "color": productColor,
             "size": productSize,
             "quantity": quantity,
-            "purchaseTime": purchaseTime
+            "purchaseTime": purchaseTime,
+            "id":productSpecId
         }
         $.ajax({
             type: "POST",
@@ -280,18 +321,87 @@
             dataType:"json",
             success:function(data){
                 let productSpecData=data.data;
-                let tableHtml="<tr specId='"+productSpecData.id+"'>" +
-                    "<th>"+productSpecData.color+"</th>" +
-                    "<th>"+productSpecData.size+"</th>" +
-                    "<th>"+productSpecData.purchaseTime+"</th>" +
-                    "<th>"+productSpecData.quantity+"</th>" +
-                    "<th>操作</th>" +
-                    "</tr>";
-                $("#productSpecTable").append(tableHtml);
-                $("#productEdit").modal("hide");
+                if(data.code===200){
+                    $("tr[specId='"+productSpecData.id+"']").remove();
+                    let tableHtml="<tr specId='"+productSpecData.id+"'>" +
+                        "<th>"+productSpecData.color+"</th>" +
+                        "<th>"+productSpecData.size+"</th>" +
+                        "<th>"+productSpecData.purchaseTime+"</th>" +
+                        "<th>"+productSpecData.quantity+"</th>" +
+                        "<th><div class=\"btn-group\">" +
+                        " <a class=\"btn btn-xs btn-default\" onclick='editProductSpec("+productSpecData.id+")' href=\"javascript:void(0)\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                        "<a class=\"btn btn-xs btn-default\" onclick='deleteProductSpec("+productSpecData.id+")' href=\"javascript:void(0)\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                        "</div></th>" +
+                        "</tr>";
+                    $("#productSpecTable").append(tableHtml);
+                    $("#productEdit").modal("hide");
+                    //删除属性
+                    //$("input[name='productId']").val("");
+                    $("input[name='productColor']").val("");
+                    //$("#productSizeSelect").val("");
+                    $("input[name='quantity']").val("");
+                    //$("input[name='purchaseTime']").val("");
+                    $("input[name='productSpecId']").val("");
+                }else{
+                    layer.alert('录入商品失败', {icon: 2});
+                }
+
             }
         });
     });
+
+    function deleteProductSpec(id){
+        layer.confirm('您确定要删除该商品吗？该商品型号数量将清零', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                type: "DELETE",
+                url: "/product/deleteProductSpec",
+                data: "id="+id,
+                dataType:"json",
+                success: function(msg){
+                    layer.close(index);
+                    if(200==msg.code){
+                        //删除当前一行
+                        $("tr[specId='"+id+"']").remove();
+                    }
+                }
+            })
+        });
+    }
+
+    function editProductSpec(id){
+        //查询出来信息
+        $.ajax({
+            type: "GET",
+            url: "/product/getProductSpecById",
+            data: "id="+id,
+            dataType:"json",
+            success: function(msg){
+                console.info(msg);
+                if(200==msg.code){
+                    let productSpec=msg.data;
+                    $("#productEditLabel").text("修改录入商品信息");
+                    $('#productEdit').modal();
+                    $("input[name='productColor']").attr("disabled",true);
+                    $("#productSizeSelect").attr("disabled",true);
+                    $("input[name='productSpecId']").val(productSpec.id);
+                    $("input[name='productColor']").val(productSpec.color);
+                    $("#productSizeSelect option[value='"+productSpec.size+"']").attr("selected","selected");
+                    $("input[name='quantity']").val(productSpec.quantity);
+                    $("input[name='purchaseTime']").val(productSpec.purchaseTime);
+                    /*$("#storeEditLabel").text("修改店铺信息");
+                    $('#storeEdit').modal();
+                    $("input[name='storeName']").val(store.storeName);
+                    $("input[name='storeAddress']").val(store.storeAddress);
+                    $("input[name='manager']").val(store.manager);
+                    $("input[name='telephone']").val(store.telephone);
+                    $("input[name='startBusinessTime']").val(store.startBusinessTime);
+                    $("input[name='id']").val(store.id);*/
+                }else{
+                    layer.alert('编辑商品失败', {icon: 2});
+                }
+            }
+        })
+    }
 
     $("#saveStore").click(function () {
         $(this).attr("disabled","disabled");
@@ -350,7 +460,6 @@
             success: function(msg){
                 fillDataToTable(msg.data);
                 loadPage(msg.pageNum,msg.totalPage);
-                console.info(msg)
             },
             error:function(){
 

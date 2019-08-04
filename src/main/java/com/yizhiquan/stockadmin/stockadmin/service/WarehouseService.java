@@ -27,4 +27,12 @@ public interface WarehouseService {
      * @return
      */
     List<Warehouse> findAllWarehouseList();
+
+    /**
+     * 删除指定的仓库
+     * @param id
+     */
+    void deleteWarehouse(Integer id);
+
+    Warehouse getWarehouseById(Integer id);
 }

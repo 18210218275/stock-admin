@@ -67,4 +67,32 @@
     FROM
       brand
   </select>
+
+  <delete id="deleteBrand">
+    delete
+    from
+      brand
+    where
+      id=#{id}
+  </delete>
+
+  <select id="getBrandById" resultMap="BaseResultMap">
+    select
+        *
+    from
+        brand
+    where
+        id=#{id}
+  </select>
+
+  <update id="updateBrand" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Brand">
+    UPDATE
+      brand
+    SET
+      brand_name_cn = #{brandNameCn},
+      brand_name_en = #{brandNameEn},
+      brand_code = #{brandCode},
+      type = #{type}
+    WHERE id = #{id}
+  </update>
 </mapper>

@@ -27,7 +27,12 @@ public class BrandServiceImpl implements BrandService {
     @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public void saveBrand(Brand brand) {
-        brandMapper.insertSelective(brand);
+        if(brand.getId()!=null){
+            brandMapper.updateBrand(brand);
+        }else{
+            brandMapper.insertSelective(brand);
+        }
+
     }
 
     @Override
@@ -48,5 +53,16 @@ public class BrandServiceImpl implements BrandService {
     public List<Brand> findAllBrand() {
         //定义缓存 guava cache
         return brandMapper.selectBrand();
+    }
+
+    @Override
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
+    public void deleteBrand(Integer id) {
+        brandMapper.deleteBrand(id);
+    }
+
+    @Override
+    public Brand getBrandById(Integer id) {
+        return brandMapper.getBrandById(id);
     }
 }

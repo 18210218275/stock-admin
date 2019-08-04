@@ -9,4 +9,8 @@ public interface SaleProductService {
     void saveSaleProduct(SaleProductVo saleProduct) throws Exception;
 
     Page<SaleProduct> findListPage(int pageNum, int pageSize);
+
+    void deleteSaleProduct(Integer id);
+
+    SaleProduct selectSaleById(Integer id);
 }

@@ -23,7 +23,12 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public void saveStore(Store store) {
-        storeMapper.insertSelective(store);
+        if(store.getId()!=null){
+            storeMapper.updateStore(store);
+        }else{
+            storeMapper.insertSelective(store);
+        }
+
     }
 
     @Override
@@ -38,5 +43,16 @@ public class StoreServiceImpl implements StoreService {
                 .data(pageStoreList.getResult())
                 .build();
         return storePageData;
+    }
+
+    @Override
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
+    public void deleteStore(Integer id) {
+        storeMapper.deleteStore(id);
+    }
+
+    @Override
+    public Store getStoreById(Integer id) {
+        return storeMapper.getStoreById(id);
     }
 }

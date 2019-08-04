@@ -17,4 +17,8 @@ public interface StoreService {
      * @return
      */
     PageData<Store> findStoreList(int pageNum, int pageSize);
+
+    void deleteStore(Integer id);
+
+    Store getStoreById(Integer id);
 }

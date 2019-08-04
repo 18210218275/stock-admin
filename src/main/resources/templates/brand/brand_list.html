@@ -113,6 +113,7 @@
         let brandNameEn=$("input[name='brandNameEn']").val();
         let brandCode=$("input[name='brandCode']").val();
         let type=$("input[name='type']").val();
+        let brandId=$("input[name='id']").val();
 
         if(typeof brandNameCn=='undefined' || brandNameCn==null|| brandNameCn==""){
 
@@ -124,7 +125,8 @@
             "brandNameCn":brandNameCn,
             "brandNameEn": brandNameEn,
             "brandCode":brandCode,
-            "type":type
+            "type":type,
+            "id":brandId
         }
 
         $.ajax({
@@ -179,12 +181,53 @@
                     +"<td>"+item.type+"</td>"
                     +"<td>"+item.createTime+"</td>"
                     +"<td><div class=\"btn-group\">" +
-                    " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
-                    "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    " <a class=\"btn btn-xs btn-default\" onclick='editBrand("+item.id+")' href=\"javascript:void(0);\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default\" onclick='deleteBrand("+item.id+")' href=\"javascript:void(0);\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                     "</div></td>";
             })
             $("#brandTable").empty().append(tableHtml);
         }
+    }
+
+    function deleteBrand(id){
+        layer.confirm('您确定要删除该品牌吗？', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                type: "DELETE",
+                url: "/brand/delete",
+                data: "id="+id,
+                dataType:"json",
+                success: function(msg){
+                    layer.close(index);
+                    if(200==msg.code){
+                        loadPageList();
+                    }
+                }
+            })
+
+        });
+    }
+
+    function editBrand(id){
+        //查询出来信息
+        $.ajax({
+            type: "GET",
+            url: "/brand/getBrandById",
+            data: "id="+id,
+            dataType:"json",
+            success: function(msg){
+                console.info(msg);
+                if(200==msg.code){
+                    let brand=msg.data;
+                    $("#brandEditLabel").text("修改品牌信息");
+                    $('#brandEdit').modal();
+                    $("input[name='brandNameCn']").val(brand.brandNameCn);
+                    $("input[name='brandNameEn']").val(brand.brandNameEn);
+                    $("input[name='brandCode']").val(brand.brandCode);
+                    $("input[name='type']").val(brand.type);
+                    $("input[name='id']").val(brand.id);
+                }
+            }
+        })
     }
 
     function loadPage(currentPage,total){

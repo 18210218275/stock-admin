@@ -12,6 +12,7 @@ import com.yizhiquan.stockadmin.stockadmin.service.BrandService;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductService;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductWarehouseStockService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +78,13 @@ public class ProductAction {
         return ResultWrapper.success(productSpec);
     }
 
+    @GetMapping("/getProductSpecById")
+    @ResponseBody
+    public ServiceResult getProductSpecById(@Param("id")Integer id){
+        ProductSpec productSpec=productService.getProductSpecById(id);
+        return ResultWrapper.success(productSpec);
+    }
+
     /*@PostMapping("/addProductSpec")
     public String addProductSpec(ProductSpec productSpec){
         productService.saveProductSpec(productSpec);
@@ -105,4 +113,10 @@ public class ProductAction {
         return ResultWrapper.success(productList);
     }
 
+    @DeleteMapping("/deleteProductSpec")
+    @ResponseBody
+    public ServiceResult deleteProductSpec(@RequestParam("id") Integer id){
+        productService.deleteProductSpec(id);
+        return ResultWrapper.success();
+    }
 }

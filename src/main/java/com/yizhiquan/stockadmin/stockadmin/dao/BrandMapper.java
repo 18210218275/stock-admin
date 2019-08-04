@@ -9,4 +9,10 @@ public interface BrandMapper {
     int insertSelective(Brand record);
 
     Page<Brand> selectBrand();
+
+    void deleteBrand(Integer id);
+
+    Brand getBrandById(Integer id);
+
+    void updateBrand(Brand brand);
 }

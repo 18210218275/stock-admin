@@ -81,4 +81,34 @@
       FROM
         store
   </select>
+
+  <delete id="deleteStore" >
+    delete
+    from
+     store
+    where
+     id=#{id}
+  </delete>
+
+  <select id="getStoreById" resultMap="BaseResultMap">
+    select
+     *
+    from
+     store
+    where
+      id=#{id}
+  </select>
+
+  <update id="updateStore" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Store">
+        UPDATE
+          store
+        SET
+          store_name = #{storeName},
+          store_address = #{storeAddress},
+          telephone = #{telephone},
+          manager = #{manager},
+          start_business_time = #{startBusinessTime},
+          type = #{type}
+        WHERE id = #{id}
+  </update>
 </mapper>

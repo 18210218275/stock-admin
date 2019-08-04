@@ -178,4 +178,18 @@
         ON sp.id = st.product_spec_id
     WHERE pro.product_code = #{productCode}
   </select>
+
+  <update id="updateMainProduct" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Product">
+    UPDATE
+      product
+    SET
+      product_name = #{productName},
+      product_code = #{productCode},
+      brand_id = #{brandId},
+      time_to_market = #{timeToMarket},
+      market_price = #{marketPrice}
+    WHERE id = #{id}
+  </update>
+
+
 </mapper>

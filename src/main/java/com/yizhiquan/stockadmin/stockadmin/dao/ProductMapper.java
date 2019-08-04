@@ -17,4 +17,7 @@ public interface ProductMapper {
     List<Product> selectProductStock(@Param("productCode") String productCode);
 
 
+    void updateMainProduct(Product product);
+
+
 }

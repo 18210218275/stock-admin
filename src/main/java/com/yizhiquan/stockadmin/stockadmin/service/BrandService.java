@@ -20,4 +20,8 @@ public interface BrandService {
      * @return
      */
     List<Brand> findAllBrand();
+
+    void deleteBrand(Integer id);
+
+    Brand getBrandById(Integer id);
 }

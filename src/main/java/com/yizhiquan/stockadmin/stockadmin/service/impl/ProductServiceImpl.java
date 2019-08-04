@@ -36,18 +36,35 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public Product saveProduct(Product product) {
-        productMapper.insertSelective(product);
+        if(product.getId()!=null){
+            productMapper.updateMainProduct(product);
+        }else{
+            productMapper.insertSelective(product);
+        }
         return product;
     }
 
     @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
-    public void saveProductSpec(ProductSpec productSpec) {
-        // TODO: 2019/6/22 先检验一遍商品信息，是否存在
+    public ProductSpec saveProductSpec(ProductSpec productSpec) {
+        ProductSpec existProductSpec=productSpecMapper.selectExistProductSpec(productSpec);
+        //todo 保存采购日志
+        if(existProductSpec==null){
+            productSpecMapper.insertSelective(productSpec);
+            return productSpec;
+        }else{
+            //如果存在ProductSpec,并且是来自修改数量操作
+            if(productSpec.getId()!=null){
+                existProductSpec.setQuantity(productSpec.getQuantity());
+            }else{
+                // 属于新录入商品数量，在原来的商品数量上进行累加
+                existProductSpec.setQuantity(productSpec.getQuantity()+existProductSpec.getQuantity());
+            }
+            existProductSpec.setPurchaseTime(productSpec.getPurchaseTime());
+            productSpecMapper.updateProductSpec(existProductSpec);
+            return existProductSpec;
+        }
 
-        //Step2 添加商品规格熟悉到商品中，如果存在，不能消减商品数量
-
-        productSpecMapper.insertSelective(productSpec);
     }
 
     @Override
@@ -84,5 +101,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findProductWarehouseByProductCode(String productCode) {
         return productMapper.selectProductStock(productCode);
+    }
+
+    @Override
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
+    public void deleteProductSpec(Integer id) {
+        productSpecMapper.deleteProductSpec(id);
+    }
+
+    @Override
+    public ProductSpec getProductSpecById(Integer id) {
+        return productSpecMapper.getProductSpecById(id);
     }
 }

@@ -21,7 +21,7 @@
       #{size,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{purchaseTime,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec">
+  <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec" useGeneratedKeys="true" keyProperty="id" >
     insert into product_spec
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -87,6 +87,40 @@
      SET
         quantity = #{quantity}
      WHERE id = #{id}
-
   </update>
+  
+  <delete id="deleteProductSpec" >
+      DELETE
+      FROM
+        product_spec
+     WHERE id = #{id}
+  </delete>
+
+  <select id="selectExistProductSpec" resultMap="BaseResultMap">
+    SELECT
+    <include refid="BaseColumns"/>
+    FROM
+    product_spec
+    WHERE color = #{color}
+    AND size = #{size}
+    AND product_id = #{productId}
+  </select>
+
+  <update id="updateProductSpec"  parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec">
+     UPDATE
+        product_spec
+     SET
+        quantity = #{quantity},
+        purchase_time= #{purchaseTime}
+     WHERE id = #{id}
+  </update>
+
+  <select id="getProductSpecById" resultMap="BaseResultMap">
+    select
+        *
+    from
+        product_spec
+    where
+        id=#{id}
+  </select>
 </mapper>

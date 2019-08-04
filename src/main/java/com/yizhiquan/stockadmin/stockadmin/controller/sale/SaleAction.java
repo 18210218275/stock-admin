@@ -44,9 +44,22 @@ public class SaleAction {
     @PostMapping("/saveSaleProduct")
     @ResponseBody
     public ServiceResult saveSaleProduct(SaleProductVo saleProduct) throws Exception {
-        System.out.println(JSON.toJSONString(saleProduct));
         saleProductService.saveSaleProduct(saleProduct);
         return ResultWrapper.success();
+    }
+
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public ServiceResult deleteSaleProduct(@RequestParam("id") Integer id){
+        saleProductService.deleteSaleProduct(id);
+        return ResultWrapper.success();
+    }
+
+    @GetMapping("/getSaleById")
+    @ResponseBody
+    public ServiceResult getSaleById(@RequestParam("id") Integer id){
+        SaleProduct saleProduct=saleProductService.selectSaleById(id);
+        return ResultWrapper.success(saleProduct);
     }
 
 }

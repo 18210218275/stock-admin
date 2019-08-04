@@ -28,7 +28,12 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public void saveWarehouse(Warehouse warehouse) {
-        warehouseMapper.insertSelective(warehouse);
+        if(warehouse.getId()!=null){
+            warehouseMapper.updateWarehouse(warehouse);
+        }else{
+            warehouseMapper.insertSelective(warehouse);
+        }
+
     }
 
     @Override
@@ -50,5 +55,16 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public List<Warehouse> findAllWarehouseList() {
         return warehouseMapper.selectWarehouse();
+    }
+
+    @Override
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
+    public void deleteWarehouse(Integer id) {
+        warehouseMapper.deleteWarehouse(id);
+    }
+
+    @Override
+    public Warehouse getWarehouseById(Integer id) {
+        return warehouseMapper.selectWarehouseById(id);
     }
 }

@@ -17,7 +17,7 @@ public interface ProductService {
      * 录入商品规格属性等详细信息
      * @param productSpec
      */
-    void saveProductSpec(ProductSpec productSpec);
+    ProductSpec saveProductSpec(ProductSpec productSpec);
 
     /**
      * 通过商品编号查询出商品相关信息
@@ -38,4 +38,17 @@ public interface ProductService {
      * @return
      */
     List<Product> findProductWarehouseByProductCode(String productCode);
+
+    /**
+     * 删除ProductSpec
+     * @param id
+     */
+    void deleteProductSpec(Integer id);
+
+    /**
+     * 获取到商品ProductSpec详细信息
+     * @param id
+     * @return
+     */
+    ProductSpec getProductSpecById(Integer id);
 }

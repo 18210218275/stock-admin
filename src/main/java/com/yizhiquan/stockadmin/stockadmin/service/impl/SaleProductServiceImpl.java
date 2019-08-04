@@ -43,7 +43,6 @@ public class SaleProductServiceImpl implements SaleProductService {
                 .productId(saleProduct.getProductId())
                 .size(saleProduct.getSize())
                 .build();
-
         List<ProductSpec> productSpecs = productSpecMapper.selectProductBySpec(productSpecParam);
         if(!CollectionUtils.isEmpty(productSpecs)){
             ProductSpec productSpec = productSpecs.get(0);
@@ -62,6 +61,17 @@ public class SaleProductServiceImpl implements SaleProductService {
         PageHelper.startPage(pageNum,pageSize);
         Page<SaleProduct> saleProductPageData=saleProductMapper.selectSaleProduct();
         return saleProductPageData;
+    }
+
+    @Override
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
+    public void deleteSaleProduct(Integer id) {
+        saleProductMapper.deleteSaleProduct(id);
+    }
+
+    @Override
+    public SaleProduct selectSaleById(Integer id) {
+        return saleProductMapper.selectSaleProductById(id);
     }
 
     private SaleProduct builderSaleProduct(SaleProductVo saleProductVo) throws ParseException {

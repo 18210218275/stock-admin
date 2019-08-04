@@ -72,4 +72,32 @@
       FROM
         warehouse
   </select>
+
+  <delete id="deleteWarehouse">
+    DELETE
+    FROM
+      warehouse
+    WHERE id = #{id}
+  </delete>
+
+  <select id="selectWarehouseById" resultMap="BaseResultMap">
+        select
+            *
+        from
+            warehouse
+        where
+           id=#{id}
+  </select>
+
+  <update id="updateWarehouse" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.Warehouse">
+     UPDATE
+      warehouse
+    SET
+      warehouse_name = #{warehouseName},
+      warehouse_address = #{warehouseAddress},
+      build_date = #{buildDate},
+      type = #{type},
+      remarks = #{remarks}
+    WHERE id = #{id}
+  </update>
 </mapper>

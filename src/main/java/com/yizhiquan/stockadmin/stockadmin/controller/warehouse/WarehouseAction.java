@@ -57,4 +57,18 @@ public class WarehouseAction {
         System.out.println(JSON.toJSONString(warehouseList));
         return ResultWrapper.success(warehouseList);
     }
+
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public ServiceResult deleteWarehouse(@RequestParam("id") Integer id){
+        warehouseService.deleteWarehouse(id);
+        return ResultWrapper.success();
+    }
+
+    @GetMapping("/getWarehouseById")
+    @ResponseBody
+    public ServiceResult getWarehouseById(@RequestParam("id") Integer id){
+        Warehouse warehouse=warehouseService.getWarehouseById(id);
+        return ResultWrapper.success(warehouse);
+    }
 }

@@ -56,6 +56,7 @@
                                             <th>仓库名称</th>
                                             <th>仓库地址</th>
                                             <th>仓库类型</th>
+                                            <th>开仓时间</th>
                                             <th>创建时间</th>
                                             <th>备注</th>
                                             <th>操作</th>
@@ -112,6 +113,7 @@
         let warehouseType=$("input[name='warehouseType']").val();
         let buildDate=$("input[name='buildDate']").val();
         let remarks=$("input[name='remarks']").val();
+        let warehouseId=$("input[name='id']").val();
         if(typeof warehouseName == "undefined" || warehouseName == null || warehouseName == ""){
             layer.tips('仓库名称不能为空','#warehouseName', {
                 tips: [3, '#ff6666'],
@@ -131,7 +133,8 @@
             "warehouseAddress":warehouseAddress,
             "type":warehouseType,
             "buildDate":buildDate,
-            "remarks":remarks
+            "remarks":remarks,
+            "id":warehouseId
         }
 
 
@@ -195,8 +198,8 @@
                         +"<td>"+item.createTime+"</td>"
                         +"<td>"+item.remarks+"</td>"
                         + "<td><div class=\"btn-group\">" +
-                    " <a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
-                    "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                    " <a class=\"btn btn-xs btn-default editBut\" onclick='editWarehouse("+item.id+")' href=\"javascript:void(0)\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
+                    "<a class=\"btn btn-xs btn-default deleteBut\"  onclick='deleteWarehouse("+item.id+")' href=\"javascript:void(0);\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
                     "</div></td>";
 
             });
@@ -204,6 +207,49 @@
             $("#warehouseTable").empty().append(tableHtml);
         }
     }
+
+    function deleteWarehouse(id){
+        layer.confirm('您确定要删除该仓库吗？', {icon: 3, title:'提示'}, function(index){
+            $.ajax({
+                type: "DELETE",
+                url: "/warehouse/delete",
+                data: "id="+id,
+                dataType:"json",
+                success: function(msg){
+                    layer.close(index);
+                    if(200==msg.code){
+                        loadPageList();
+                    }
+                }
+            })
+
+        });
+    }
+
+    function editWarehouse(id){
+        //查询出来信息
+        $.ajax({
+            type: "GET",
+            url: "/warehouse/getWarehouseById",
+            data: "id="+id,
+            dataType:"json",
+            success: function(msg){
+                if(200==msg.code){
+                    let warehouse=msg.data;
+                    $("#warehouseEditLabel").text("修改仓库信息");
+                    $('#warehouseEdit').modal();
+                    $("input[name='warehouseName']").val(warehouse.warehouseName);
+                    $("input[name='warehouseAddress']").val(warehouse.warehouseAddress);
+                    $("input[name='warehouseType']").val();
+                    $("input[name='warehouseType'][value='"+warehouse.type+"']").attr("checked",true);
+                    $("input[name='buildDate']").val(warehouse.buildDate);
+                    $("input[name='remarks']").val(warehouse.remarks);
+                    $("input[name='id']").val(warehouse.id);
+                }
+            }
+        })
+    }
+
 
     function loadPage(currentPage,total){
         $('#pageLimit').bootstrapPaginator({
