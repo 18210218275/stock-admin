@@ -223,6 +223,7 @@
         $('#productEdit').modal();
         $("input[name='productColor']").attr("disabled",false);
         $("#productSizeSelect").attr("disabled",false);
+        $("#warehouse").attr("disabled",false);
         $("input[name='productColor']").val("");
         $("input[name='quantity']").val("");
         //$("#")
@@ -306,13 +307,21 @@
         let productSize=$("#productSizeSelect").val();
         let quantity=$("input[name='quantity']").val();
         let purchaseTime=$("input[name='purchaseTime']").val();
+        let warehouse=$("#warehouse").val();
+        let warehouseName=$("#warehouse").find("option:selected").text();
+        let brandName=$("#brandCode").find("option:selected").text();
+        //品牌 仓库名称
+
         let specData={
             "productId": productId,
             "color": productColor,
             "size": productSize,
             "quantity": quantity,
             "purchaseTime": purchaseTime,
-            "id":productSpecId
+            "id":productSpecId,
+            "warehouseId":warehouse,
+            "warehouseName": warehouseName,
+            "brandName": brandName
         }
         $.ajax({
             type: "POST",
@@ -383,6 +392,7 @@
                     $('#productEdit').modal();
                     $("input[name='productColor']").attr("disabled",true);
                     $("#productSizeSelect").attr("disabled",true);
+                    $("#warehouse").attr("disabled",true);
                     $("input[name='productSpecId']").val(productSpec.id);
                     $("input[name='productColor']").val(productSpec.color);
                     $("#productSizeSelect option[value='"+productSpec.size+"']").attr("selected","selected");

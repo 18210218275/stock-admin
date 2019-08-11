@@ -27,5 +27,11 @@ public class ProductSpec {
 
     private Date createTime;
 
+    private Integer warehouseId;
+
+    private String warehouseName;
+
+    private String brandName;
+
     private List<ProductWarehouseStock> productWarehouseStockList;
 }

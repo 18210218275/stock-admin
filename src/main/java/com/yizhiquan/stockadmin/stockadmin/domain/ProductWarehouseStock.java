@@ -1,7 +1,16 @@
 package com.yizhiquan.stockadmin.stockadmin.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductWarehouseStock {
     private Integer id;
 
@@ -16,6 +25,10 @@ public class ProductWarehouseStock {
     private Date createTime;
 
     private Date updateTime;
+
+    private String warehouseName;
+
+    private String brandName;
 
     public Integer getId() {
         return id;

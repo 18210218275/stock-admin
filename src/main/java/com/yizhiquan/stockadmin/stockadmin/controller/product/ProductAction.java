@@ -7,10 +7,12 @@ import com.yizhiquan.stockadmin.stockadmin.common.exception.ServiceResult;
 import com.yizhiquan.stockadmin.stockadmin.domain.Brand;
 import com.yizhiquan.stockadmin.stockadmin.domain.Product;
 import com.yizhiquan.stockadmin.stockadmin.domain.ProductSpec;
+import com.yizhiquan.stockadmin.stockadmin.domain.Warehouse;
 import com.yizhiquan.stockadmin.stockadmin.domain.dto.TransferReq;
 import com.yizhiquan.stockadmin.stockadmin.service.BrandService;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductService;
 import com.yizhiquan.stockadmin.stockadmin.service.ProductWarehouseStockService;
+import com.yizhiquan.stockadmin.stockadmin.service.WarehouseService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,16 @@ public class ProductAction {
 
     private BrandService brandService;
 
+    private WarehouseService warehouseService;
+
     private ProductWarehouseStockService productWarehouseStockService;
 
     @Autowired
-    public ProductAction(ProductService productService, BrandService brandService, ProductWarehouseStockService productWarehouseStockService){
+    public ProductAction(ProductService productService, BrandService brandService, ProductWarehouseStockService productWarehouseStockService,WarehouseService warehouseService){
         this.productService=productService;
         this.brandService=brandService;
         this.productWarehouseStockService=productWarehouseStockService;
+        this.warehouseService=warehouseService;
     }
 
     @GetMapping("/list")
@@ -48,10 +53,12 @@ public class ProductAction {
     @GetMapping("/edit")
     public ModelAndView editProduct(){
         List<Brand> brandList = brandService.findAllBrand();
+        List<Warehouse> allWarehouseList = warehouseService.findAllWarehouseList();
         ModelAndView model = new ModelAndView();
         model.setViewName("product/product_add");
         model.addObject("pageMenuName", PageEnum.ADD_PRODUCT_PAGE.getPageCode());
         model.addObject("brandList",brandList);
+        model.addObject("warehouseList",allWarehouseList);
         return model;
     }
 

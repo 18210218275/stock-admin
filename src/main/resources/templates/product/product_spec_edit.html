@@ -15,17 +15,24 @@
                     <input type="text" name="productColor" class="form-control" id="productColor" placeholder="请输入服装颜色">
                 </div>
                 <div class="form-group">
-                    <label>尺码：</label>
-                    <!--<input type="text" name="warehouseAddress" class="form-control" id="warehouseAddress" placeholder="请输入仓库地址">-->
-                    <select class="form-control" name="productSize" id="productSizeSelect">
-                        <option value="">---请选择---</option>
-                        <option value="160/42/XS">160/42/XS</option>
-                        <option value="165/44/S">165/44/S</option>
-                        <option value="170/46/M">170/46/M</option>
-                        <option value="175/48/L">175/48/L</option>
-                        <option value="180/50/XL">180/50/XL</option>
-                        <option value="185/52/XXL">185/52/XXL</option>
-                        <option value="190/54/XXXL">190/54/XXXL</option>
+                <label>尺码：</label>
+                <!--<input type="text" name="warehouseAddress" class="form-control" id="warehouseAddress" placeholder="请输入仓库地址">-->
+                <select class="form-control" name="productSize" id="productSizeSelect">
+                    <option value="">---请选择---</option>
+                    <option value="160/42/XS">160/42/XS</option>
+                    <option value="165/44/S">165/44/S</option>
+                    <option value="170/46/M">170/46/M</option>
+                    <option value="175/48/L">175/48/L</option>
+                    <option value="180/50/XL">180/50/XL</option>
+                    <option value="185/52/XXL">185/52/XXL</option>
+                    <option value="190/54/XXXL">190/54/XXXL</option>
+                </select>
+            </div>
+                <div class="form-group">
+                    <label>默认存储仓库：</label>
+                    <select class="form-control" name="productSize" id="warehouse" >
+                        <option th:each="warehouse : ${warehouseList}" th:value="${warehouse.id}" th:text="${warehouse.warehouseName
+                                                }"></option>
                     </select>
                 </div>
                <!-- <div class="form-group">

@@ -24,7 +24,7 @@
                         <div class="card">
 
                             <div class="card-toolbar clearfix">
-                                <form class="pull-right search-bar" method="get" action="#!" role="form">
+                                <form class=" search-bar" method="get" action="#!" role="form">
                                     <div class="input-group">
                                         <div class="input-group-btn">
                                             <input type="hidden" name="search_field" id="search-field" value="title">
@@ -39,13 +39,12 @@
                                         </div>
                                         <input type="text" class="form-control" value="" name="productSearch" placeholder="请输入商品货号">
                                     </div>
+
                                 </form>
-                                <div class="toolbar-btn-action">
-                                    <a class="btn btn-primary m-r-5"  id="transferProduct" href="javascript:void(0) "><i class="mdi mdi-plus" ></i> 商品调拨</a>
-                                    <!--<a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
-                                    <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
-                                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>-->
+                                <div class="toolbar-btn-action " style="margin-top: -38px;margin-right: 55%;">
+                                    <a class="btn btn-primary m-r-5 pull-right"  id="transferProduct" href="javascript:void(0) "><i class="mdi mdi-paw" ></i> 搜索调拨商品</a>
                                 </div>
+
                             </div>
                             <div class="card-body">
                                <!-- <div class="toolbar-btn-action">
@@ -82,7 +81,7 @@
 
                                 </div>
                                 <div style="align-content: center">
-                                    <a class="btn btn-success" id="saveTransferBut" style="margin-left: 45%;" href="javascript:void(0);"><i class="mdi mdi-check"></i> 保存</a>
+                                    <a class="btn btn-success" id="saveTransferBut" style="margin-left: 45%;" href="javascript:void(0);" disabled="true"><i class="mdi mdi-check"></i> 保存</a>
                                 </div>
                             </div>
 
@@ -139,7 +138,12 @@
             dataType:"json",
             success: function (data) {
                 //transferProductTable
-                fillTransferTable(data.data);
+                if(data.code==200){
+                    $("#saveTransferBut").attr("disabled",false);
+                    fillTransferTable(data.data);
+                }else{
+                    layer.msg("未查询到该商品");
+                }
             }
         });
     });
@@ -162,41 +166,56 @@
                     console.info("specSize: "+ productSpec.size);
                     console.info("specColor: "+ productSpec.color);
                     $.each(productSpec.productWarehouseStockList,function(stockIndex,stock){
-                        transferTable+=" <tr specId='"+productSpec.id+"' productId='"+product.id+"' stockId='"+stock.id+"'>" +
-                            "<th>"+product.productCode+"</th>" +
-                            "<th>"+product.productName+"</th>" +
-                            "<th>"+product.brandId+"</th>" +
-                            "<th>"+productSpec.size+"</th>" +
-                            "<th>"+productSpec.color+"</th>" +
-                            "<th>"+productSpec.quantity+"</th>" +
-                            "<th>" +stock.warehouseId+" </th>" +
-                            "<th><input type=\"text\" name=\"quantity\" class=\"form-control\"></th>" +
-                            " <th>" +
-                            "<select class=\"form-control in_transfer\">" +
-                            "<option value=\"\">---请选择---</option>" +
-                            getSelectWarehouse()+
-                            "< /select>" +
-                            "</th>" +
-                            "<th>" +
-                            "<div class=\"btn-group\">" +
-                            "<a class=\"btn btn-xs btn-default split-transfer-warehouse\" href=\"javascript:void(0);\" title=\"拆分\" data-toggle=\"tooltip\"><i class=\"mdi mdi-sitemap\"></i></a>" +
-                            "<a class=\"btn btn-xs btn-default\" href=\"#!\" title=\"编辑\" data-toggle=\"tooltip\"><i class=\"mdi mdi-pencil\"></i></a>" +
-                            "<a class=\"btn btn-xs btn-default delete-transfer\" href=\"#!\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
-                            "</div>" +
-                            "</th>" +
-                            "</tr>";
+                        if($("tr[stockId='"+stock.id+"']").length==0){
+                            transferTable+=" <tr specId='"+productSpec.id+"' productId='"+product.id+"' stockId='"+stock.id+"'>" +
+                                "<th>"+product.productCode+"</th>" +
+                                "<th>"+product.productName+"</th>" +
+                                "<th>"+stock.brandName+"</th>" +
+                                "<th>"+productSpec.size+"</th>" +
+                                "<th>"+productSpec.color+"</th>" +
+                                "<th>"+stock.quantity+"</th>" +
+                                "<th wid='"+stock.id+"'>" +stock.warehouseName+" </th>" +
+                                "<th><input type=\"text\" name=\"quantity\" class=\"form-control\"></th>" +
+                                " <th>" +
+                                "<select class=\"form-control in_transfer\">" +
+                                "<option value=\"\">---请选择---</option>" +
+                                getSelectWarehouse()+
+                                "< /select>" +
+                                "</th>" +
+                                "<th>" +
+                                "<div class=\"btn-group\">" +
+                                "<a class=\"btn btn-xs btn-default \" onclick='splitTransferProduct(this)' href=\"javascript:void(0);\" title=\"拆分\" data-toggle=\"tooltip\"><i class=\"mdi mdi-sitemap\"></i></a>" +
+                                "<a class=\"btn btn-xs btn-default delete-transfer\" onclick='deleteTransfer(this)' href=\"javascript:void(0);\" title=\"删除\" data-toggle=\"tooltip\"><i class=\"mdi mdi-window-close\"></i></a>" +
+                                "</div>" +
+                                "</th>" +
+                                "</tr>";
+                        }
                     })
                 });
             })
             $("#transferProductTable").append(transferTable);
+        }else {
+            layer.msg("未查询到该商品");
         }
     }
 
-    $(".split-transfer-warehouse").click(function(){
+    function splitTransferProduct(obj){
         //点击事件
-        let trHtml=$(this).parent().parent().parent().html();
-        console.info(trHtml);
-    });
+        let originalTr=$(obj).parent().parent().parent();
+        let currentTr=originalTr.clone();
+        let totalQuantity=currentTr.find("th:eq(5)").text();
+        let usedQuantity=currentTr.find("input[name='quantity']").val();
+        let num=totalQuantity-usedQuantity;
+        if(usedQuantity!=null&& usedQuantity!=""&& (totalQuantity-usedQuantity)>0){
+                currentTr.find("th:eq(5)").text(num);
+                currentTr.find("input[name='quantity']").val("");
+                originalTr.after(currentTr);
+        }
+    }
+
+    function deleteTransfer(obj){
+        $(obj).parent().parent().parent().remove();
+    }
 
     $("#saveTransferBut").click(function(){
         //保存调拨商品
@@ -209,12 +228,20 @@
             let stockId=$(this).attr("stockId");
             let quantity=$(this).find("input[name='quantity']").val();
             let warehouseId=$(this).find("option:selected").val();
+            let brandName=$(this).find("th:eq(2)").text();
+            let warehouseName=$(this).find("option:selected").text();
+            let orginalQuantity=$(this).find("th:eq(5)").text();
+            let orginalWarehouseId=$(this).find("th:eq(6)").attr("wid");
             let transfer={
                 "productId": productId,
                 "specId": specId,
                 "quantity": quantity,
                 "warehouseId":warehouseId,
-                "stockId": stockId
+                "stockId": stockId,
+                "brandName": brandName,
+                "warehouseName": warehouseName,
+                "orginalQuantity": orginalQuantity,
+                "orginalWarehouseId": orginalWarehouseId
             }
             transferArr.push(transfer);
         });
@@ -226,16 +253,15 @@
             contentType: "application/json",
             success: function (data) {
                 console.info(data);
+                if(data.code==200){
+                    layer.msg("保存成功");
+                    window.location.href="/product/transfer";
+                }else{
+                    layer.alert("调拨保存失败");
+                }
             }
         });
     });
-
-
-
-
-
-
-
 </script>
 </body>
 </html>

@@ -30,6 +30,8 @@
         <result column="stock_quantity" jdbcType="INTEGER" property="quantity" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
+        <result column="brand_name" jdbcType="VARCHAR" property="brandName"/>
       </collection>
     </collection>
   </resultMap>
@@ -169,7 +171,9 @@
       sp.quantity AS spec_quantity,
       st.quantity AS stock_quantity,
       st.warehouse_id,
-      st.id AS stock_id
+      st.id AS stock_id,
+      st.brand_name,
+      st.warehouse_name
     FROM
       product pro
       JOIN product_spec sp

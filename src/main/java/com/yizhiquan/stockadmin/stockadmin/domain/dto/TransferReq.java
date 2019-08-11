@@ -26,8 +26,27 @@ public class TransferReq implements Serializable {
     private int quantity;
 
     /**
+     * 从原始调拨量
+     */
+    private int orginalQuantity;
+
+    /**
+     * 原始仓库
+     */
+    private Integer orginalWarehouseId;
+
+    /**
      * 存储主键
      */
     private Integer stockId;
 
+    /**
+     *  品牌名称
+     */
+    private String brandName;
+
+    /**
+     * 仓库名称
+     */
+    private String warehouseName;
 }

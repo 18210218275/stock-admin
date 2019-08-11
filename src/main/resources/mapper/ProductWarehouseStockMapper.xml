@@ -9,14 +9,15 @@
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName"/>
   </resultMap>
   <insert id="insert" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductWarehouseStock">
-    insert into product_warehouse_stock (id, product_spec_id, product_id, 
-      warehouse_id, quantity, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{productSpecId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
-      #{warehouseId,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into product_warehouse_stock ( product_spec_id, product_id,
+      warehouse_id, quantity, warehouse_name, brand_name )
+    values (#{productSpecId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
+      #{warehouseId,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER},
+      #{warehouseName,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductWarehouseStock">
     insert into product_warehouse_stock
@@ -88,9 +89,51 @@
     <foreach collection="existTransferList" item="transfer" separator=";">
       update product_warehouse_stock
       <set>
-        warehouse_id=#{transfer.warehouseId,jdbcType=INTEGER}
+
       </set>
       where id=#{transfer.stockId}
     </foreach>
   </update>
+
+  <select id="selectBySpecAndProduct" resultMap="BaseResultMap" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductWarehouseStock">
+      SELECT
+        *
+      FROM
+        product_warehouse_stock
+      WHERE product_spec_id = #{productSpecId}
+        AND product_id = #{productId}
+        AND warehouse_id = #{warehouseId}
+  </select>
+
+  <update id="updateProductStock" parameterType="com.yizhiquan.stockadmin.stockadmin.domain.ProductWarehouseStock">
+    UPDATE
+      product_warehouse_stock
+    SET
+      quantity = #{quantity}
+    WHERE product_spec_id = #{productSpecId}
+      AND product_id = #{productId}
+      AND warehouse_id = #{warehouseId}
+  </update>
+
+  <select id="selectStockByIds" resultMap="BaseResultMap" >
+    select
+     * 
+    from 
+        product_warehouse_stock
+    <where>
+        id in
+      <foreach collection="stockSet" item="stockId" open="(" separator="," close=")">
+        #{stockId}
+      </foreach>
+    </where>
+  </select>
+
+  <select id="selectStockById" resultMap="BaseResultMap">
+    select
+     *
+    from
+      product_warehouse_stock
+    where
+      id=#{stockId}
+  </select>
 </mapper>
